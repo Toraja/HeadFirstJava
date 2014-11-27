@@ -111,7 +111,11 @@ class Player {
 			map.put(charArray[i], i);
 		}
 		
-        y = Integer.parseInt(splitInput[1]);
+		// get coordinate X
+		x = map.get(splitInput[1].toUpperCase());
+		
+		//get coordinate Y
+        y = Integer.parseInt(splitInput[2]);
         
     }
 }
