@@ -2,6 +2,10 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 
+public SinkADotCom {
+    // TODO add code here
+}
+
 class Ship{
     private String name;
     private int shipHP;
