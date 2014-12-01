@@ -32,9 +32,9 @@ class Ship{
     }
 }
 
-class Field { // TODO 1 field for 1 game. Game and Field can be combined?
+class Field {
     int shipNum;
-    private ShipComponent[][] field = new ShipComponent[7][7];
+    private ShipComponent[][] shipLocation = new ShipComponent[7][7];
 //    int[] shipHP;
     
     public void setShipNum(int num){
@@ -44,12 +44,14 @@ class Field { // TODO 1 field for 1 game. Game and Field can be combined?
         return this.shipNum;
     }
     
-	public void setField(ShipComponent field, int x, int y){
-        this.field[x][y] = field;
+	public void setShipLocation(ShipComponent shipLocation, int x, int y){
+        this.shipLocation[x][y] = shipLocation;
 	}
-	public ShipComponent getField(int x, int y){
-		return this.field[x][y];
+	public ShipComponent getShipLocation(int x, int y){
+		return this.shipLocation[x][y];
 	}
+	
+	// TODO create method initField()
     
 //    public void setShipHP(int shipHP, int idx){
 //        this.shipHP[idx] = shipHP;
