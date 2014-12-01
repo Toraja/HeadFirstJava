@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 
-public SinkADotCom {
+public class SinkADotCom {
     public static void main(String[] args){
     // TODO add code here
     }
