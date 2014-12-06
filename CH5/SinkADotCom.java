@@ -35,7 +35,11 @@ class Ship{
 class Field {
     int shipNum;
     private ShipComponent[][] shipLocation = new ShipComponent[7][7];
-//    int[] shipHP;
+    private static final int UP = 1;
+    private static final int DOWN = 2;
+    private static final int RIGHT = 3;
+    private static final int LEFT = 4;
+    private enum Direction {UP, DOWN, RIGHT, LEFT};
     
     public void setShipNum(int num){
         this.shipNum = num;
@@ -52,6 +56,46 @@ class Field {
 	}
 	
 	// TODO create method initField()
+    public void initField(int shipNum){
+        int random1;
+        int random2;
+    
+        this.shipNum = shipNum;
+        // create 3 sets of ship component
+        for (int i = 0; i < shipNum; i++){
+            // generate 3 pair of random number
+            random1 = (int)Math.floor(Math.random()*7);
+            random2 = (int)Math.floor(Math.random()*7);
+        
+        }
+    }
+
+    private Direction directShip(int x, int y){
+        final int FIELD_LENGTH = 7;
+        final int FIELD_WIDTH = 7;
+        final int SHIP_SIZE = 3;
+        int topLeftEdge = (SHIP_SIZE -1);
+        int bottomEdge = (FIELD_LENGTH - topLeftEdge);
+        int rightEdge = (FIELD_WIDTH - topLeftEdge);
+        Direction[] availableDirection = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+		int randomNum = (int)Math.floor(Math.random() * 4);
+
+        if(y <= topLeftEdge){
+            availableDirection[0] = Direction.DOWN;
+        }
+		else if(y >= bottomEdge){
+			availableDirection[1] = Direction.UP;
+		}
+		if(x <= topLeftEdge){
+			availableDirection[2] = Direction.RIGHT;
+		}
+		else if (x >= rightEdge){
+			availableDirection[3] = Direction.LEFT;
+		}
+		
+		return availableDirection[randomNum];
+		
+    }
     
 //    public void setShipHP(int shipHP, int idx){
 //        this.shipHP[idx] = shipHP;
