@@ -11,6 +11,7 @@ public class SinkADotCom {
 class Ship{
     private String name;
     private int shipHP;
+	private static int shipSize = 3;
     
     public void setName(String name){
         this.name = name;
@@ -30,11 +31,21 @@ class Ship{
     public int getShipHP(){
         return this.shipHP;
     }
+	
+	public void setShipSize(int shipSize){
+		this.shipSize = shipSize;
+	}
+	public int getShipSize(){
+		return this.shipSize;
+	}
+
 }
 
 class Field {
-    int shipNum;
-    private ShipComponent[][] shipLocation = new ShipComponent[7][7];
+    private int shipNum;
+	private int fieldLength = 7;
+	private int fieldWidth = 7;
+    private ShipComponent[][] shipLocation = new ShipComponent[fieldLength][fieldWidth];
     private static final int UP = 1;
     private static final int DOWN = 2;
     private static final int RIGHT = 3;
@@ -57,26 +68,57 @@ class Field {
 	
 	// TODO create method initField()
     public void initField(int shipNum){
-        int random1;
-        int random2;
-    
-        this.shipNum = shipNum;
+        int startPointX;
+        int startPointY;
+		int[][] shipCoodinates = new int[2][this.shipSize]; // first row: x, second row: y
+	
+        setShipNum(shipNum);
+		
         // create 3 sets of ship component
         for (int i = 0; i < shipNum; i++){
             // generate 3 pair of random number
-            random1 = (int)Math.floor(Math.random()*7);
-            random2 = (int)Math.floor(Math.random()*7);
-        
+            startPointX = (int)Math.floor(Math.random()*fieldWidth);
+            startPointY = (int)Math.floor(Math.random()*fieldLength);
+				
+			switch(directShip(startPointX, startPointY)){
+			case Drection.UP:
+				for(int j = 0; j < this.shipSize; j++){
+					shipCoordinates[0][j] = startPointX;
+					shipCoordinates[1][j] = startPointY - j;
+				}
+				break;
+			}
+			case Drection.DOWN:
+				for(int j = 0; j < this.shipSize; j++){
+					shipCoordinates[0][j] = startPointX;
+					shipCoordinates[1][j] = startPointY + j;
+				}
+				break;
+			}
+			case Drection.RIGHT:
+				for(int j = 0; j < this.shipSize; j++){
+					shipCoordinates[0][j] = startPointX + j;
+					shipCoordinates[1][j] = startPointY;
+				}
+				break;
+			}
+			case Drection.DOWN:
+				for(int j = 0; j < this.shipSize; j++){
+					shipCoordinates[0][j] = startPointX - j;
+					shipCoordinates[1][j] = startPointY;
+				}
+			}
+			
+				
         }
     }
 
     private Direction directShip(int x, int y){
         final int FIELD_LENGTH = 7;
         final int FIELD_WIDTH = 7;
-        final int SHIP_SIZE = 3;
-        int topLeftEdge = (SHIP_SIZE -1);
-        int bottomEdge = (FIELD_LENGTH - topLeftEdge);
-        int rightEdge = (FIELD_WIDTH - topLeftEdge);
+        int topLeftEdge = (this.shipSize -1);
+        int bottomEdge = (this.fieldLength - topLeftEdge);
+        int rightEdge = (this.fieldWidth - topLeftEdge);
         Direction[] availableDirection = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
 		int randomNum = (int)Math.floor(Math.random() * 4);
 
@@ -96,6 +138,14 @@ class Field {
 		return availableDirection[randomNum];
 		
     }
+	
+	private initShip(int x, int y, int coefficientX, int coefficientY){
+		for(int j = 0; j < this.shipSize; j++){
+			coordinateX = x + (j * coefficientX)
+			coordinateY = x + (j * coefficientY)
+			this.shipLocation[coordinateX][coordinateY] = 
+		}
+	}
     
 //    public void setShipHP(int shipHP, int idx){
 //        this.shipHP[idx] = shipHP;
