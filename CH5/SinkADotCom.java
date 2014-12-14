@@ -140,23 +140,25 @@ class Field {
 	private int fieldWidth;
 	private Ship[] ships;
     private ShipComponent[][] shipLocation = new ShipComponent[fieldLength][fieldWidth];
-    private static final int UP = 1;
+    private static final int NOWHERE = 0;
+	private static final int UP = 1;
     private static final int DOWN = 2;
     private static final int RIGHT = 3;
     private static final int LEFT = 4;
-    private enum Direction {UP, DOWN, RIGHT, LEFT};
+    private enum Direction {NOWHERE, UP, DOWN, RIGHT, LEFT};
     
+	// init variables as well as parents ship
 	public Field(int shipNum, int fieldLength, int fieldWidth){
 		this.shipNum = shipNum;
 		this.fieldLength = fieldLength;
 		this.fieldWidth = fieldWidth;
 		
 		// initiate an array for parentShips
-		ships = new Ship[shipNum];
+		this.ships = new Ship[shipNum];
 		// put ships in the array
 		for(int i = 0; i < this.shipNum; i++){
 			// initiate ships
-			ships[i] = new Ship(ShipInfo.getRandomShipNames(), ShipInfo.ShipSize.MID);
+			this.ships[i] = new Ship(ShipInfo.getRandomShipNames(), ShipInfo.ShipSize.MID);
 		}
 	}
 
@@ -178,70 +180,88 @@ class Field {
     public void initField(){
         int startPointX;
         int startPointY;
-		int[][] shipCoordinates; // first row: x, second row: y
+		int shipHP;
+		boolean built; // whether a ship has been successfully built
+		// int[][] shipCoordinates; // first row: x, second row: y
 	
         // create 3 sets of ship component
         for (int i = 0; i < this.shipNum; i++){
-            // generate 3 pair of random number
-			int shipHP = this.ships[i].getShipHP();
-			shipCoordinates = new int[2][shipHP];
-            startPointX = (int)Math.floor(Math.random()*fieldWidth);
-            startPointY = (int)Math.floor(Math.random()*fieldLength);
-				
-			switch(directShip(startPointX, startPointY, shipHP)){
-			case UP:
-				for(int j = 0; j < shipHP; j++){
-					shipCoordinates[0][j] = startPointX;
-					shipCoordinates[1][j] = startPointY - j;
-				}
-				break;
-			case DOWN:
-				for(int j = 0; j < shipHP; j++){
-					shipCoordinates[0][j] = startPointX;
-					shipCoordinates[1][j] = startPointY + j;
-				}
-				break;
-			case RIGHT:
-				for(int j = 0; j < shipHP; j++){
-					shipCoordinates[0][j] = startPointX + j;
-					shipCoordinates[1][j] = startPointY;
-				}
-				break;
-			case LEFT:
-				for(int j = 0; j < shipHP; j++){
-					shipCoordinates[0][j] = startPointX - j;
-					shipCoordinates[1][j] = startPointY;
+			shipHP = this.ships[i].getShipHP();
+			// shipCoordinates = new int[2][shipHP];
+			while(!built){
+				// generate a pair of random number
+				startPointX = (int)Math.floor(Math.random()*fieldWidth);
+				startPointY = (int)Math.floor(Math.random()*fieldLength);
+				// convert built to true in advance. change it back to false if it fails
+				built = true;	
+				switch(directShip(startPointX, startPointY, shipHP)){
+				case UP:
+					for(int j = 0; j < shipHP; j++){
+						shipLocation[startPointX][startPointY - j] = ShipComponent(this.ships[i]);
+						// shipCoordinates[0][j] = startPointX;
+						// shipCoordinates[1][j] = startPointY - j;
+					}
+					break;
+				case DOWN:
+					for(int j = 0; j < shipHP; j++){
+						shipLocation[startPointX][startPointY + j] = ShipComponent(this.ships[i]);
+						// shipCoordinates[0][j] = startPointX;
+						// shipCoordinates[1][j] = startPointY + j;
+					}
+					break;
+				case RIGHT:
+					for(int j = 0; j < shipHP; j++){
+						shipLocation[startPointX + j][startPointY] = ShipComponent(this.ships[i]);
+						// shipCoordinates[0][j] = startPointX + j;
+						// shipCoordinates[1][j] = startPointY;
+					}
+					break;
+				case LEFT:
+					for(int j = 0; j < shipHP; j++){
+						shipLocation[startPointX - j][startPointY] = ShipComponent(this.ships[i]);
+						// shipCoordinates[0][j] = startPointX - j;
+						// shipCoordinates[1][j] = startPointY;
+					}
+					break;
+				case NOWHERE:
+					built = false;
 				}
 			}
-			
-			// init ShipComponent	
         }
     }
 
 	/**
-	* this method returns which direction a ship 
-	* should direct
-	*
+	* This method returns which direction a ship can head
+	* This also avoids collision
 	*
 	*/
     private Direction directShip(int x, int y, int shipHP){
-        int topLeftEdge = (shipHP -1);
-        int bottomEdge = (this.fieldLength - topLeftEdge);
-        int rightEdge = (this.fieldWidth - topLeftEdge);
+        int topEdge = (shipHP -2);
+        int leftEdge = (shipHP -2);
+        int bottomEdge = (this.fieldLength - 1 - topEdge);
+        int rightEdge = (this.fieldWidth - 1 - leftEdge);
         Direction[] availableDirection = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+		boolean upAvailable = true;
+		boolean downAvailable = true;
+		boolean rightAvailable = true;
+		boolean leftAvailable = true;
 		int randomNum = (int)Math.floor(Math.random() * 4);
 
-        if(y <= topLeftEdge){
-            availableDirection[0] = Direction.DOWN;
+        if(y <= topEdge){
+            upAvailable = false;
+			// availableDirection[0] = Direction.DOWN;
         }
 		else if(y >= bottomEdge){
-			availableDirection[1] = Direction.UP;
+			downAvailable = false;
+			// availableDirection[1] = Direction.UP;
 		}
-		if(x <= topLeftEdge){
-			availableDirection[2] = Direction.RIGHT;
+		if(x <= leftEdge){
+			leftAvailable = false;
+			// availableDirection[2] = Direction.RIGHT;
 		}
 		else if (x >= rightEdge){
-			availableDirection[3] = Direction.LEFT;
+			rightAvailable = false;
+			// availableDirection[3] = Direction.LEFT;
 		}
 		
 		return availableDirection[randomNum];
@@ -254,7 +274,7 @@ class Field {
 		int coordinateY;
 		for(int j = 0; j < shipHP; j++){
 			coordinateX = x + (j * coefficientX);
-			coordinateY = x + (j * coefficientY);
+			coordinateY = y + (j * coefficientY);
 			//this.shipLocation[coordinateX][coordinateY] = 
 		}
 	}
