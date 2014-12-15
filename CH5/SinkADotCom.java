@@ -74,6 +74,10 @@ class ShipInfo{
 	public static final int MID = 2;
 	public static final int LARGE = 3;
 	public enum ShipSize {SMALL, MID, LARGE};
+	
+	public static int getShipNamesLength(){
+		return shipNames.length;
+	}
 
 	public static void setShipNames(String shipName, int index){
 		shipNames[index] = shipName;
