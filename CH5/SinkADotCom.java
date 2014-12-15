@@ -1,6 +1,8 @@
-import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
 
 public class SinkADotCom {
     public static void main(String[] args){
@@ -181,7 +183,7 @@ class Field {
         int startPointX;
         int startPointY;
 		int shipHP;
-		boolean built; // whether a ship has been successfully built
+		boolean built = false; // whether a ship has been successfully built
 		// int[][] shipCoordinates; // first row: x, second row: y
 	
         // create 3 sets of ship component
@@ -197,30 +199,22 @@ class Field {
 				switch(directShip(startPointX, startPointY, shipHP)){
 				case UP:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX][startPointY - j] = ShipComponent(this.ships[i]);
-						// shipCoordinates[0][j] = startPointX;
-						// shipCoordinates[1][j] = startPointY - j;
+						shipLocation[startPointX][startPointY - j] = new ShipComponent(this.ships[i]);
 					}
 					break;
 				case DOWN:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX][startPointY + j] = ShipComponent(this.ships[i]);
-						// shipCoordinates[0][j] = startPointX;
-						// shipCoordinates[1][j] = startPointY + j;
+						shipLocation[startPointX][startPointY + j] = new ShipComponent(this.ships[i]);
 					}
 					break;
 				case RIGHT:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX + j][startPointY] = ShipComponent(this.ships[i]);
-						// shipCoordinates[0][j] = startPointX + j;
-						// shipCoordinates[1][j] = startPointY;
+						shipLocation[startPointX + j][startPointY] = new ShipComponent(this.ships[i]);
 					}
 					break;
 				case LEFT:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX - j][startPointY] = ShipComponent(this.ships[i]);
-						// shipCoordinates[0][j] = startPointX - j;
-						// shipCoordinates[1][j] = startPointY;
+						shipLocation[startPointX - j][startPointY] = new ShipComponent(this.ships[i]);
 					}
 					break;
 				case NOWHERE:
@@ -240,13 +234,16 @@ class Field {
         int leftEdge = (shipHP -2);
         int bottomEdge = (this.fieldLength - 1 - topEdge);
         int rightEdge = (this.fieldWidth - 1 - leftEdge);
-        Direction[] availableDirection = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+        Direction shipDirection = Direction.NOWHERE;
+        // Direction[] availableDirection = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT};
+		ArrayList<Direction> directionList = new ArrayList<Direction>();
 		boolean upAvailable = true;
 		boolean downAvailable = true;
 		boolean rightAvailable = true;
 		boolean leftAvailable = true;
-		int randomNum = (int)Math.floor(Math.random() * 4);
+		int randomNum; // = (int)Math.floor(Math.random() * 4);
 
+		// change the availability of each direction depending on the ship's initializing coordinate
         if(y <= topEdge){
             upAvailable = false;
 			// availableDirection[0] = Direction.DOWN;
@@ -264,20 +261,62 @@ class Field {
 			// availableDirection[3] = Direction.LEFT;
 		}
 		
-		return availableDirection[randomNum];
-		
-    }
-	
-	// TODO whats the hell am I doing here? coefficient? why would I need it?
-	private void initShip(int x, int y, int coefficientX, int coefficientY, int shipHP){
-		int coordinateX;
-		int coordinateY;
-		for(int j = 0; j < shipHP; j++){
-			coordinateX = x + (j * coefficientX);
-			coordinateY = y + (j * coefficientY);
-			//this.shipLocation[coordinateX][coordinateY] = 
+		// see if other ships are on the way
+		if(upAvailable){
+			for(int i = 1; i < shipHP; i++){
+				if(shipLocation[x][y-i] != null){
+					upAvailable = false;
+					break;
+				}
+			}
 		}
-	}
+		if(downAvailable){
+			for(int i = 1; i < shipHP; i++){
+				if(shipLocation[x][y+i] != null){
+					downAvailable = false;
+					break;
+				}
+			}
+		}
+		if(leftAvailable){
+			for(int i = 1; i < shipHP; i++){
+				if(shipLocation[x-i][y] != null){
+					leftAvailable = false;
+					break;
+				}
+			}
+		}
+		if(rightAvailable){
+			for(int i = 1; i < shipHP; i++){
+				if(shipLocation[x+i][y] != null){
+					rightAvailable = false;
+					break;
+				}
+			}
+		}
+		if(upAvailable){
+			directionList.add(Direction.UP);
+		}
+		if(downAvailable){
+			directionList.add(Direction.DOWN);
+		}
+		if(rightAvailable){
+			directionList.add(Direction.RIGHT);
+		}
+		if(leftAvailable){
+			directionList.add(Direction.LEFT);
+		}
+		
+		if(directionList.size() != 0){
+			randomNum = (int)Math.floor(Math.random() * directionList.size());
+			shipDirection = directionList.get(randomNum);
+		}
+		else{
+			shipDirection = Direction.NOWHERE;
+		}
+		
+		return shipDirection;
+    }
 }
 
 class Player {
