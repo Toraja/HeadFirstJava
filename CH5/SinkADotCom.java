@@ -40,10 +40,10 @@ class Ship{
         return this.shipHP;
     }
 	
-	public void setshipSizeType(ShipInfo.ShipSize shipSizeType){
+	public void setShipSizeType(ShipInfo.ShipSize shipSizeType){
 		this.shipSizeType = shipSizeType;
 	}
-	public ShipInfo.ShipSize getshipSizeType(){
+	public ShipInfo.ShipSize getShipSizeType(){
 		return this.shipSizeType;
 	}
 
@@ -178,8 +178,7 @@ class Field {
 		return this.shipLocation[x][y];
 	}
 	
-	// TODO create method initField()
-    public void initField(){
+	    public void initField(){
         int startPointX;
         int startPointY;
 		int shipHP;
