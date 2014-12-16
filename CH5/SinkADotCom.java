@@ -78,7 +78,6 @@ class ShipInfo{
 	public static int getShipNamesLength(){
 		return shipNames.length;
 	}
-
 	public static void setShipNames(String shipName, int index){
 		shipNames[index] = shipName;
 	}
@@ -86,6 +85,9 @@ class ShipInfo{
 		return shipNames[index];
 	}
 	
+	public static int getShipNamesAssignedLength(){
+		return shipNamesAssigned.length;
+	}
 	public static void setShipNamesAssigned(boolean Assigned, int index){
 		shipNamesAssigned[index] = Assigned;
 	}
