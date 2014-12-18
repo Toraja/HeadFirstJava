@@ -4,7 +4,9 @@ public class TestShipInfo{
 		
 		//testGetSetShipAssigned();		
 		
-		testGetRandomShipNames();
+		//testGetRandomShipNames();
+		
+		testGetShipHPForType();
 	}
 	
 	private static void testGetSetShipName(){
@@ -57,5 +59,20 @@ public class TestShipInfo{
 		catch(Exception e){
 			System.err.println("Error");
 		}
+	}
+	
+	private static void testGetShipHPForType(){
+		String largeShipName = "largeShip";
+		String midShipName = "midShip";
+		String smallShipName = "smallShip";
+	
+		Ship largeShip = new Ship(largeShipName, ShipInfo.ShipSize.LARGE);
+		Ship midShip = new Ship(midShipName, ShipInfo.ShipSize.MID);
+		Ship smallShip = new Ship(smallShipName, ShipInfo.ShipSize.SMALL);
+		
+		System.out.println("HP for " + largeShipName + "expected: 4, actual: " + largeShip.getShipHP());
+		System.out.println("HP for " + midShipName + "expected: 3, actual: " + midShip.getShipHP());
+		System.out.println("HP for " + smallShipName + "expected: 2, actual: " + smallShip.getShipHP());
+		
 	}
 }

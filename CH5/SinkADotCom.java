@@ -27,7 +27,7 @@ class Ship{
 		this.name = name;
 		this.shipSizeType = shipSizeType;
 		// ship size and ship HP are same
-		this.shipHP = ShipInfo.getShipHP(shipSizeType);
+		this.shipHP = ShipInfo.getShipHPForType(shipSizeType);
 	}
     
     public void setName(String name){
@@ -145,7 +145,7 @@ class ShipInfo{
 		return shipName;
 	}
 	
-	public static int getShipHP(ShipSize shipSize){
+	public static int getShipHPForType(ShipSize shipSize){
 		int HP = 0;
 		switch(shipSize){
 		case SMALL:
