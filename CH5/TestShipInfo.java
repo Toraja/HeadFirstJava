@@ -2,7 +2,9 @@ public class TestShipInfo{
 	public static void main(String[] args){
 		// testGetSetShipName();
 		
-		testGetSetShipAssigned();		
+		//testGetSetShipAssigned();		
+		
+		testGetRandomShipNames();
 	}
 	
 	private static void testGetSetShipName(){
@@ -44,5 +46,16 @@ public class TestShipInfo{
 		}
 		System.out.println();
 		
-	}	
+	}
+	
+	private static void testGetRandomShipNames(){
+		try{
+			for(int i = 0; i < 11; i++){
+				System.out.println(ShipInfo.getRandomShipNames() + ";");
+			}
+		}
+		catch(Exception e){
+			System.err.println("Error");
+		}
+	}
 }

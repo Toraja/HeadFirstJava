@@ -6,11 +6,15 @@ import java.util.Scanner;
 
 public class SinkADotCom {
     public static void main(String[] args){
-    // TODO add code here
+		// TODO add code here
 	
-	// construct Field with num of ships and the size of field
-	Field field = new Field(3, 7, 7);
-	
+		// construct Field with num of ships and the size of field
+		try{
+			Field field = new Field(3, 7, 7);
+		}
+		catch(Exception e){
+			System.err.println("Program halted");
+		}
     }
 }
 
@@ -116,13 +120,29 @@ class ShipInfo{
 		return largeShipHP;
 	}
 	
-	public static String getRandomShipNames(){
+	public static String getRandomShipNames() throws Exception{
+		int count = 0;
 		int index;
+		String shipName = "";
+		
 		do{
 			index = (int)Math.floor(Math.random()*shipNames.length);
-		}while(!shipNamesAssigned[index]);
-		shipNamesAssigned[index] = true;
-		return shipNames[index];
+			if(!shipNamesAssigned[index]){
+				shipName = shipNames[index];
+				shipNamesAssigned[index] = true;
+				break;
+			}
+			
+			while(shipNamesAssigned[count]){
+				count++;
+				if(count == shipNamesAssigned.length){
+					System.err.println("All the names have been assigned. Unable to continue.");
+					throw new Exception();
+				}
+			}
+		}while(true);
+		
+		return shipName;
 	}
 	
 	public static int getShipHP(ShipSize shipSize){
@@ -156,7 +176,7 @@ class Field {
     private enum Direction {NOWHERE, UP, DOWN, RIGHT, LEFT};
     
 	// init variables as well as parents ship
-	public Field(int shipNum, int fieldLength, int fieldWidth){
+	public Field(int shipNum, int fieldLength, int fieldWidth) throws Exception{
 		this.shipNum = shipNum;
 		this.fieldLength = fieldLength;
 		this.fieldWidth = fieldWidth;
