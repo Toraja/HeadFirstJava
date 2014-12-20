@@ -160,6 +160,12 @@ class ShipInfo{
 		}
 		return HP;	
 	}
+	
+	public static void resetNameAssignment(){
+		for(int i = 0; i < shipNamesAssigned.length; i++{
+			shipNamesAssigned[i] = false;
+		}
+	}
 }
 
 class Field {
@@ -196,6 +202,13 @@ class Field {
     public int getShipNum(){
         return this.shipNum;
     }
+    
+    public void setShips(Ship ships, int index){
+		this.ships[index] = ships;
+	}
+	public Ship getShips(int index){
+		return this.ships[index];
+	}
     
 	public void setShipLocation(ShipComponent shipComponent, int x, int y){
         this.shipLocation[x][y] = shipComponent;
