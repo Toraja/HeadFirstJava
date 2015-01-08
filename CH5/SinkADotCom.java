@@ -162,7 +162,7 @@ class ShipInfo{
 	}
 	
 	public static void resetNameAssignment(){
-		for(int i = 0; i < shipNamesAssigned.length; i++{
+		for(int i = 0; i < shipNamesAssigned.length; i++){
 			shipNamesAssigned[i] = false;
 		}
 	}
