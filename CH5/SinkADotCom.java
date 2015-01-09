@@ -386,10 +386,10 @@ class Player {
 			String msg = "Coordinate must be the combination of A to G and 1 to 7.";
             // input validation
             if (input.length() != 2) {
-                System.err.println(msg);
+                System.out.println(msg);
             }
             else if (!input.matches(pattern)){
-                System.err.println(msg);
+                System.out.println(msg);
             }
             else {
                 invalid = false;
@@ -409,6 +409,8 @@ class Player {
 		
 		//get coordinate Y
         y = Integer.parseInt(splitInput[2]);
+        
+        
         
     }
 }
