@@ -173,7 +173,7 @@ class Field {
 	private int fieldLength;
 	private int fieldWidth;
 	private Ship[] ships;
-    private ShipComponent[][] shipLocation = new ShipComponent[fieldLength][fieldWidth];
+    private ShipComponent[][] shipLocation;
     private static final int NOWHERE = 0;
 	private static final int UP = 1;
     private static final int DOWN = 2;
@@ -186,6 +186,7 @@ class Field {
 		this.shipNum = shipNum;
 		this.fieldLength = fieldLength;
 		this.fieldWidth = fieldWidth;
+		this.shipLocation = new ShipComponent[fieldLength][fieldWidth];
 		
 		// initiate an array for parentShips
 		this.ships = new Ship[shipNum];
@@ -202,7 +203,21 @@ class Field {
     public int getShipNum(){
         return this.shipNum;
     }
-    
+
+	public void setFieldLength(int fieldLength){
+		this.fieldLength = fieldLength;
+	}
+	public int getFieldLength(){
+		return this.fieldLength;
+	}
+
+	public void setFieldWidth(int fieldWidth){
+		this.fieldWidth = fieldWidth;
+	}
+	public int getFieldWidth(){
+		return this.fieldWidth;
+	}
+
     public void setShips(Ship ships, int index){
 		this.ships[index] = ships;
 	}
@@ -210,17 +225,30 @@ class Field {
 		return this.ships[index];
 	}
     
-	public void setShipLocation(ShipComponent shipComponent, int x, int y){
-        this.shipLocation[x][y] = shipComponent;
+	public void setShipLocation(ShipComponent shipComponent, int y, int x){
+        this.shipLocation[y][x] = shipComponent;
 	}
-	public ShipComponent getShipLocation(int x, int y){
-		return this.shipLocation[x][y];
+	public ShipComponent getShipLocation(int y, int x){
+		return this.shipLocation[y][x];
+	}
+	public int getShipLocationWidth(){
+		return this.shipLocation.length;
+	}
+	public int getShipLocationLength(){
+		int length = 0;
+		
+		if(this.shipLocation.length > 0){
+			length = this.shipLocation[0].length;
+		}
+		
+		return length;
 	}
 	
-	    public void initField(){
+	public void placeShips(){
         int startPointX;
         int startPointY;
 		int shipHP;
+		boolean collided = false; // whether a ship already exists at stating point 
 		boolean built = false; // whether a ship has been successfully built
 		// int[][] shipCoordinates; // first row: x, second row: y
 	
@@ -229,36 +257,47 @@ class Field {
 			shipHP = this.ships[i].getShipHP();
 			// shipCoordinates = new int[2][shipHP];
 			while(!built){
-				// generate a pair of random number
-				startPointX = (int)Math.floor(Math.random()*fieldWidth);
-				startPointY = (int)Math.floor(Math.random()*fieldLength);
+				collided = true;
+				while(collided){
+					// generate a pair of random number
+					startPointX = (int)Math.floor(Math.random()*fieldWidth);
+					startPointY = (int)Math.floor(Math.random()*fieldLength);
+					if(this.getShipLocation(startPointY,startPointX) == null){
+						collided = false;
+					}
+				}
 				// convert built to true in advance. change it back to false if it fails
 				built = true;	
-				switch(directShip(startPointX, startPointY, shipHP)){
+				switch(directShip(startPointY, startPointX, shipHP)){
 				case UP:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX][startPointY - j] = new ShipComponent(this.ships[i]);
+						shipLocation[startPointY - j][startPointX] = new ShipComponent(this.ships[i]);
+						printShips((startPointY - j),(startPointX),"UP",shipLocation[startPointY - j][startPointX]);
 					}
 					break;
 				case DOWN:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX][startPointY + j] = new ShipComponent(this.ships[i]);
+						shipLocation[startPointY + j][startPointX] = new ShipComponent(this.ships[i]);
+						printShips((startPointY + j),(startPointX),"DOWN",shipLocation[startPointY + j][startPointX]);
 					}
 					break;
 				case RIGHT:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX + j][startPointY] = new ShipComponent(this.ships[i]);
+						shipLocation[startPointY][startPointX + j] = new ShipComponent(this.ships[i]);
+						printShips((startPointY),(startPointX + j),"RIGHT",shipLocation[startPointY][startPointX + j]);
 					}
 					break;
 				case LEFT:
 					for(int j = 0; j < shipHP; j++){
-						shipLocation[startPointX - j][startPointY] = new ShipComponent(this.ships[i]);
+						shipLocation[startPointY][startPointX - j] = new ShipComponent(this.ships[i]);
+						printShips((startPointY),(startPointX - j),"LEFT",shipLocation[startPointY][startPointX - j]);
 					}
 					break;
 				case NOWHERE:
 					built = false;
 				}
 			}
+			built = false;
         }
     }
 
@@ -267,7 +306,7 @@ class Field {
 	* This also avoids collision
 	*
 	*/
-    private Direction directShip(int x, int y, int shipHP){
+    private Direction directShip(int y, int x, int shipHP){
         int topEdge = (shipHP -2);
         int leftEdge = (shipHP -2);
         int bottomEdge = (this.fieldLength - 1 - topEdge);
@@ -302,7 +341,7 @@ class Field {
 		// see if other ships are on the way
 		if(upAvailable){
 			for(int i = 1; i < shipHP; i++){
-				if(shipLocation[x][y-i] != null){
+				if(shipLocation[y-i][x] != null){
 					upAvailable = false;
 					break;
 				}
@@ -310,7 +349,7 @@ class Field {
 		}
 		if(downAvailable){
 			for(int i = 1; i < shipHP; i++){
-				if(shipLocation[x][y+i] != null){
+				if(shipLocation[y+i][x] != null){
 					downAvailable = false;
 					break;
 				}
@@ -318,7 +357,7 @@ class Field {
 		}
 		if(leftAvailable){
 			for(int i = 1; i < shipHP; i++){
-				if(shipLocation[x-i][y] != null){
+				if(shipLocation[y][x-i] != null){
 					leftAvailable = false;
 					break;
 				}
@@ -326,7 +365,7 @@ class Field {
 		}
 		if(rightAvailable){
 			for(int i = 1; i < shipHP; i++){
-				if(shipLocation[x+i][y] != null){
+				if(shipLocation[y][x+i] != null){
 					rightAvailable = false;
 					break;
 				}
@@ -354,6 +393,13 @@ class Field {
 		}
 		
 		return shipDirection;
+    }
+    
+    /**
+    * For debugging placeShips method
+    */
+    private static void printShips(int y, int x, String direction, ShipComponent shipComp){
+    	System.out.println(direction + " " + y + " " + x + " " + shipComp.getParentShip().getName());
     }
 }
 
