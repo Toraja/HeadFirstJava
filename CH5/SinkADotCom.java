@@ -245,8 +245,8 @@ class Field {
 	}
 	
 	public void placeShips(){
-        int startPointX;
-        int startPointY;
+        int startPointX = 0;
+        int startPointY = 0;
 		int shipHP;
 		boolean collided = false; // whether a ship already exists at stating point 
 		boolean built = false; // whether a ship has been successfully built
