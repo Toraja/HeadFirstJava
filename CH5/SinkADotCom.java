@@ -6,11 +6,21 @@ import java.util.Scanner;
 
 public class SinkADotCom {
     public static void main(String[] args){
-		// TODO add code here
-	
+
+		playGame(25);
+		
+    }
+    
+    static void playGame(int maxTrial){
 		// construct Field with num of ships and the size of field
 		try{
 			Field field = new Field(3, 7, 7);
+			
+			Player player = new Player();
+			
+			while(field.getShipNum() > 0){
+				player.shoot(field);
+			}
 		}
 		catch(Exception e){
 			System.err.println("Program halted");
@@ -50,7 +60,6 @@ class Ship{
 	public ShipInfo.ShipSize getShipSizeType(){
 		return this.shipSizeType;
 	}
-
 }
 
 class ShipComponent {
@@ -272,25 +281,29 @@ class Field {
 				case UP:
 					for(int j = 0; j < shipHP; j++){
 						shipLocation[startPointY - j][startPointX] = new ShipComponent(this.ships[i]);
-						printShips((startPointY - j),(startPointX),"UP",shipLocation[startPointY - j][startPointX]);
+						//for debug
+						//printShips((startPointY - j),(startPointX),"UP",shipLocation[startPointY - j][startPointX]);
 					}
 					break;
 				case DOWN:
 					for(int j = 0; j < shipHP; j++){
 						shipLocation[startPointY + j][startPointX] = new ShipComponent(this.ships[i]);
-						printShips((startPointY + j),(startPointX),"DOWN",shipLocation[startPointY + j][startPointX]);
+						//for debug
+						//printShips((startPointY + j),(startPointX),"DOWN",shipLocation[startPointY + j][startPointX]);
 					}
 					break;
 				case RIGHT:
 					for(int j = 0; j < shipHP; j++){
 						shipLocation[startPointY][startPointX + j] = new ShipComponent(this.ships[i]);
-						printShips((startPointY),(startPointX + j),"RIGHT",shipLocation[startPointY][startPointX + j]);
+						//for debug
+						//printShips((startPointY),(startPointX + j),"RIGHT",shipLocation[startPointY][startPointX + j]);
 					}
 					break;
 				case LEFT:
 					for(int j = 0; j < shipHP; j++){
 						shipLocation[startPointY][startPointX - j] = new ShipComponent(this.ships[i]);
-						printShips((startPointY),(startPointX - j),"LEFT",shipLocation[startPointY][startPointX - j]);
+						//for debug
+						//printShips((startPointY),(startPointX - j),"LEFT",shipLocation[startPointY][startPointX - j]);
 					}
 					break;
 				case NOWHERE:
@@ -405,7 +418,7 @@ class Field {
 
 class Player {
     int numTrial;
-
+    
 	public void setNumTrial(int numTrial){
 		this.numTrial = numTrial;
 	}
@@ -413,9 +426,11 @@ class Player {
 		return this.numTrial;
 	}
 
-    void shoot() {
+    void shoot(Field field) {
         int x;
         int y;
+        ShipComponent shipComponent;
+        Ship parentShip;
         String input = "";
         String[] splitInput = new String[2];
 		char[] charArray = {'A','B','C','D','E','F','G'};
@@ -431,10 +446,7 @@ class Player {
 			String pattern = "[a-gA-G][1-7]";
 			String msg = "Coordinate must be the combination of A to G and 1 to 7.";
             // input validation
-            if (input.length() != 2) {
-                System.out.println(msg);
-            }
-            else if (!input.matches(pattern)){
+            if (!(input.length() == 2 && input.matches(pattern))){
                 System.out.println(msg);
             }
             else {
@@ -454,9 +466,28 @@ class Player {
 		x = map.get(splitInput[1].toUpperCase());
 		
 		//get coordinate Y
-        y = Integer.parseInt(splitInput[2]);
+        y = Integer.parseInt(splitInput[2]) - 1;
         
-        
-        
+        shipComponent = field.getShipLocation(y, x);
+        if(shipComponent == null){
+        	System.out.println("Miss");
+        }
+        else{
+        	parentShip = shipComponent.getParentShip();
+        	System.out.println("Hit " + parentShip.getName() + " !");
+        	
+        	field.setShipLocation(null, y, x);
+        	
+        	parentShip.setShipHP(parentShip.getShipHP() - 1);
+        	
+        	if(parentShip.getShipHP() == 0){
+        		System.out.println("Sinked " + parentShip.getName() + " !!");
+        		field.setShipNum(field.getShipNum() - 1);
+        			if(field.getShipNum() == 0){
+        				System.out.println("Congrats!! You have sunk all the Dotcoms!");
+        			}
+        	}
+        }
+        this.numTrial++;
     }
 }
