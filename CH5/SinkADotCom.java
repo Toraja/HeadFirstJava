@@ -15,12 +15,15 @@ public class SinkADotCom {
 		// construct Field with num of ships and the size of field
 		try{
 			Field field = new Field(3, 7, 7);
+			field.placeShips();
 			
 			Player player = new Player();
 			
+			Scanner in = new Scanner(System.in);
 			while(field.getShipNum() > 0){
-				player.shoot(field);
+				player.shoot(field, in);
 			}
+			in.close();
 		}
 		catch(Exception e){
 			System.err.println("Program halted");
@@ -426,48 +429,48 @@ class Player {
 		return this.numTrial;
 	}
 
-    void shoot(Field field) {
+    void shoot(Field field, Scanner in) {
         int x;
         int y;
         ShipComponent shipComponent;
         Ship parentShip;
         String input = "";
-        String[] splitInput = new String[2];
-		char[] charArray = {'A','B','C','D','E','F','G'};
-		Map<Character, Integer> map = new HashMap<Character, Integer>();
+        String[] splitInput;
+		String[] charArray = {"A","B","C","D","E","F","G"};
+		Map<String, Integer> map = new HashMap<String, Integer>();
         boolean invalid = true;
 
 		// get user input until it is a valid one
-        Scanner in = new Scanner(System.in);
 		do {
 			System.out.println("Enter coordinate");
 			input = in.next();
-			
+
 			String pattern = "[a-gA-G][1-7]";
 			String msg = "Coordinate must be the combination of A to G and 1 to 7.";
-            // input validation
-            if (!(input.length() == 2 && input.matches(pattern))){
-                System.out.println(msg);
-            }
-            else {
-                invalid = false;
-            }
-        }while(invalid);
-		in.close();
-		
+	        // input validation
+	        if (!(input.length() == 2 && input.matches(pattern))){
+	            System.out.println(msg);
+	        }
+	        else {
+	            invalid = false;
+	        }
+	    }while(invalid);
+
         splitInput = input.split("|");
-        
+
 		// initiate a map to convert letter to number
 		for (int i = 0; i < charArray.length; i++){
 			map.put(charArray[i], i);
 		}
-		
+
+        this.numTrial++;
+
 		// get coordinate X
 		x = map.get(splitInput[1].toUpperCase());
-		
+
 		//get coordinate Y
         y = Integer.parseInt(splitInput[2]) - 1;
-        
+
         shipComponent = field.getShipLocation(y, x);
         if(shipComponent == null){
         	System.out.println("Miss");
@@ -484,10 +487,9 @@ class Player {
         		System.out.println("Sinked " + parentShip.getName() + " !!");
         		field.setShipNum(field.getShipNum() - 1);
         			if(field.getShipNum() == 0){
-        				System.out.println("Congrats!! You have sunk all the Dotcoms!");
+        				System.out.println("Congrats!! You have sunk all the DotComs in " + this.numTrial + " shots!");
         			}
         	}
         }
-        this.numTrial++;
     }
 }
