@@ -469,6 +469,7 @@ class Player {
 		x = map.get(splitInput[1].toUpperCase());
 
 		//get coordinate Y
+
         y = Integer.parseInt(splitInput[2]) - 1;
 
         shipComponent = field.getShipLocation(y, x);
