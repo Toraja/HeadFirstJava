@@ -5,78 +5,111 @@ public class FunWithConstructor {
 		
 		String dadName = "Joseph";
 		String mumName = "Monica";
-		String childName = "Nicole";
+		
+		Story story1 = new Story();
+		
+		try{
+			story1.makeStory(4, dadName, mumName);
+			story1.readStory();
+		}
+		catch(Exception e){
+			// do nothing
+		}
+	}
+	
+	
+}
+
+class Commons {
+	static String MALE = "male";
+	static String FEMALE = "female";
+	// static enum SEX {MALE, FEMALE};
+	
+	static int CHILD_NUM_LIMIT = 5;
+}
+
+class Story {
+	
+	ArrayList<String> story = new ArrayList<String>();
+	
+	public void makeStory(int numOfChildren, String dadName, String mumName) throws Exception {
+		if(numOfChildren > Commons.CHILD_NUM_LIMIT){
+			System.out.println("Have you been using condom? You are having too many children!");
+			throw new Exception();
+		}
 		
 		Dad dad = new Dad(dadName);
 		Mum mum = new Mum(mumName);
 		
 		Parents parents = dad.getMarriedWith(mum);
-		Child child = parents.haveBaby(childName, "male");
 		
-		ArrayList<String> story = new ArrayList<String>();
+		for(int i = 0; i < numOfChildren; i++){
+			parents.haveBaby();
+		}
+		
 		String line;
 		
-		line = "There was a dad, whose name was " + parents.getDad().getName() + "."; 
+		line = "There was a dad, whose name was " + parents.getDad().getName(); 
 		story.add(line);
 		
-		line = "There was a mum, whose name was " + parents.getMum().getName() + ".";
+		line = "There was a mum, whose name was " + parents.getMum().getName();
 		story.add(line);
 		
 		// get child's num
-		line = "They had ";
-		int numOfChildren = parents.getNumOfChildren();
 		String childWordForm = "";
-		line += String.valueOf(numOfChildren);
+
 		if(numOfChildren > 1){
-			childWordForm = " children.";
+			childWordForm = " children";
 		} else{
-			childWordForm = " child.";
+			childWordForm = " child";
 		}
-		line += childWordForm;
+		line = "They had " + String.valueOf(numOfChildren) + childWordForm;
 		story.add(line);
 		
 		if(numOfChildren > 0){
-		line = "";
-		String subject = "";
-		String possessive = "";
-		String male = "male";
-		String female = "female";
+		int counter = 0;
 		// compare child's DNA and display his/her name
-			for(Child eachChild : parents.children){
-				if(male.equals(eachChild.getSex())){
-					subject = "he";
-					possessive = "his";
+			for(Child eachChild : parents.getAllChildren()){
+				counter++;
+				String ordinalNum = "";
+				
+				switch(counter){
+				case 1:
+					ordinalNum = "1st";
+					break;
+				case 2:
+					ordinalNum = "2nd";
+					break;
+				case 3:
+					ordinalNum = "3rd";
+					break;
+				default:
+					ordinalNum = counter + "th";
+					break;
 				}
-				else if(male.equals(eachChild.getSex())){
-					subject = "she";
-					possessive = "her";
-				}
-				else {
-					subject = "he (or she?)";
-				}
-				String theChildName = eachChild.getName();
-				line = "Is " + subject + " our child? " + eachChild.equals(child) + ", " + possessive + " name is " + theChildName;
+				String childName = eachChild.getName();
+				line = "The name of the " + ordinalNum + " child was " + childName;
 				story.add(line);
 				
-				line = "Hey " + theChildName + ", what's your dad's name? " + eachChild.getParents().getDad().getName();
+				line = "Hey " + childName + ", what's your dad's name? " + eachChild.getParents().getDad().getName();
 				story.add(line);
 				
 				line = "And what's your mum's name? " + eachChild.getParents().getMum().getName();
 				story.add(line);
 			}
-		
-		readStory(story);
+			
+		line = "The family lived happily";
+		story.add(line);
 		}
 		else {
-			line = "End of the story";
+			line = "They enjoyed their life";
 			story.add(line);
-			readStory(story);
 		}
 	}
 	
-	public static void readStory(ArrayList<String> lines){
-		for(String line : lines){
-			System.out.println(line);
+	public void readStory(){
+		for(String line : story){
+			System.out.println(line + ".");
 		}
 	}
 }
@@ -127,6 +160,10 @@ class Parents {
 	int numOfChildren = 0;
 	ArrayList<Child> children = new ArrayList<Child>();
 	
+	String[] maleNameList = {"Nicole", "Stephane", "Andrew", "Guy", "Richard"};
+	String[] femaleNameList = {"Sophia", "Victor", "Cathy", "Becky", "Diana"};
+	String[] unisexNameList = {"", "", "", "", ""};
+		
 	public Parents(Dad dad, Mum mum){
 		this.dad = dad;
 		this.mum = mum;
@@ -159,12 +196,44 @@ class Parents {
 	public Child getChildren(int index){
 		return this.children.get(index);
 	}
+	public ArrayList<Child> getAllChildren(){
+		return this.children;
+	}
 	
-	public Child haveBaby(String name, String sex){
+	public void haveBaby(){
+		String sex = determineSex();
+		String name = chooseChildName(sex);
 		Child child = new Child(this, name, sex);
 		children.add(child);
 		numOfChildren++;
-		return child;
+	}
+	
+	public String determineSex(){
+		String sex = "";
+		if((int)(Math.random() * 2) == 0){
+			sex = Commons.MALE;
+		}
+		else {
+			sex = Commons.FEMALE;
+		}
+		
+		return sex;
+	} 
+	
+	public String chooseChildName(String sex){
+		String name;
+		
+		if(sex.equals(Commons.MALE)){
+			name = maleNameList[numOfChildren];
+		}
+		else if(sex.equals(Commons.FEMALE)){
+			name = femaleNameList[numOfChildren];
+		}
+		else {
+			name = unisexNameList[numOfChildren];
+		}
+		
+		return name;
 	}
 
 }
