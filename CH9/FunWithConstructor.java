@@ -6,11 +6,19 @@ public class FunWithConstructor {
 		String dadName = "Joseph";
 		String mumName = "Monica";
 		
+		Story story0 = new Story();
 		Story story1 = new Story();
+		Story story2 = new Story();
 		
 		try{
-			story1.makeStory(4, dadName, mumName);
+			story0.writeStory(0, "David", "Stacy");
+			story0.readStory();
+			
+			story1.writeStory(4, dadName, mumName);
 			story1.readStory();
+			
+			story2.writeStory(6, "Vincent", "Alice");
+			story2.readStory();
 		}
 		catch(Exception e){
 			// do nothing
@@ -21,8 +29,8 @@ public class FunWithConstructor {
 }
 
 class Commons {
-	static String MALE = "male";
-	static String FEMALE = "female";
+	static final String MALE = "male";
+	static final String FEMALE = "female";
 	// static enum SEX {MALE, FEMALE};
 	
 	static int CHILD_NUM_LIMIT = 5;
@@ -30,11 +38,28 @@ class Commons {
 
 class Story {
 	
-	ArrayList<String> story = new ArrayList<String>();
+	ArrayList<Line> story = new ArrayList<Line>();
+	// ArrayList<String> story = new ArrayList<String>();
 	
-	public void makeStory(int numOfChildren, String dadName, String mumName) throws Exception {
+	// final String PERIOD = ".";
+	// final String QUESTION = "?";
+	// final String NONE = "";
+	public enum EndPunc {
+		PERIOD("."), QUESTION("?"), NONE("");
+		
+		String string;
+		EndPunc(String s){
+			string = s;
+		}
+		public String getLiteral(){
+			return string;
+		}
+	};
+	
+	public void writeStory(int numOfChildren, String dadName, String mumName) throws Exception {
 		if(numOfChildren > Commons.CHILD_NUM_LIMIT){
-			System.out.println("Have you been using condom? You are having too many children!");
+			System.out.println("You have " + numOfChildren + " kids!?");
+			System.out.println("Do you use condom? You are having too many children!");
 			throw new Exception();
 		}
 		
@@ -49,26 +74,29 @@ class Story {
 		
 		String line;
 		
-		line = "There was a dad, whose name was " + parents.getDad().getName(); 
-		story.add(line);
-		
+		// Chapter 1
+		line = "There was a dad, whose name was " + parents.getDad().getName();
+		story.add(new Statement(line));
 		line = "There was a mum, whose name was " + parents.getMum().getName();
-		story.add(line);
+		story.add(new Statement(line));
+		story.add(new Blank());
 		
-		// get child's num
+		// Chapter 2
+		// inform the number of children the parents had
 		String childWordForm = "";
-
 		if(numOfChildren > 1){
 			childWordForm = " children";
 		} else{
 			childWordForm = " child";
 		}
+		
 		line = "They had " + String.valueOf(numOfChildren) + childWordForm;
-		story.add(line);
+		story.add(new Statement(line));
+		story.add(new Blank());
 		
 		if(numOfChildren > 0){
 		int counter = 0;
-		// compare child's DNA and display his/her name
+		// ask children about their parents name
 			for(Child eachChild : parents.getAllChildren()){
 				counter++;
 				String ordinalNum = "";
@@ -89,27 +117,84 @@ class Story {
 				}
 				String childName = eachChild.getName();
 				line = "The name of the " + ordinalNum + " child was " + childName;
-				story.add(line);
+				story.add(new Statement(line));
+
+				line = "Hey " + childName + ", what's your dad's name";
+				story.add(new Question(line));
+				line = eachChild.getParents().getDad().getName();
+				story.add(new Statement(line));
 				
-				line = "Hey " + childName + ", what's your dad's name? " + eachChild.getParents().getDad().getName();
-				story.add(line);
-				
-				line = "And what's your mum's name? " + eachChild.getParents().getMum().getName();
-				story.add(line);
+				line = "And what's your mum's name";
+				story.add(new Question(line));
+				line = eachChild.getParents().getMum().getName();
+				story.add(new Statement(line));
+				story.add(new Blank());
 			}
 			
+		// Ending
 		line = "The family lived happily";
-		story.add(line);
+		story.add(new Statement(line));
 		}
 		else {
+			// Ending
 			line = "They enjoyed their life";
-			story.add(line);
+			story.add(new Statement(line));
 		}
 	}
 	
+	public void composeStory(String line, EndPunc endPunc){
+		/* switch(type){
+		case "s":
+		} */
+	}
+	
 	public void readStory(){
-		for(String line : story){
-			System.out.println(line + ".");
+		/* for(String line : story){
+			System.out.println(line);
+		} */
+		for(Line line : story){
+			System.out.print(line.getContents());
+			System.out.println(line.getEndPunc().getLiteral());
+			// System.out.println(EndPunc.PERIOD);
+		}
+		System.out.println(System.lineSeparator());
+	}
+	
+	abstract class Line {
+		String contents;
+		EndPunc endPunc;
+		
+		public void setContents(String contents){
+			this.contents = contents;
+		}
+		public String getContents(){
+			return this.contents;
+		}
+		
+		public void setEndPunc(EndPunc endPunc){
+			this.endPunc = endPunc;
+		}
+		public EndPunc getEndPunc(){
+			return this.endPunc;
+		}
+	}
+	
+	class Statement extends Line{
+		public Statement(String contents){
+			this.contents = contents;
+			this.endPunc = EndPunc.PERIOD;
+		}
+	}
+	class Question extends Line{
+		public Question(String contents){
+			this.contents = contents;
+			this.endPunc = EndPunc.QUESTION;
+		}
+	}
+	class Blank extends Line{
+		public Blank(){
+			this.endPunc = EndPunc.NONE;
+			this.contents = "";
 		}
 	}
 }
