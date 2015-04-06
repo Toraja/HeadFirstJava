@@ -22,8 +22,8 @@ class FullMoons{
 				
 		for(int x = 0; x < 60; x++){
 			day1 += (DAY_IN * 29.52);
-			c.setTimeInMills(day1);
-			out.println(String.format("full moon on #tc", c));		
+			c.setTimeInMillis(day1);
+			out.println(String.format("full moon on %tc", c));		
 		}
 	}
 }	
