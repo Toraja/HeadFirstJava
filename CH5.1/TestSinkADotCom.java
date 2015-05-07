@@ -11,9 +11,8 @@ validateInput
 */
 public class TestSinkADotCom {
 	public static void main(String[] args) {
-		TestSinkADotCom testClass = new TestSinkADotCom();
+//		testGetRandomIntUpTo();
 		
-		testClass.testGetRandomIntUpTo();
 	}
 	
 	private static void testGetRandomIntUpTo(){
@@ -31,15 +30,197 @@ public class TestSinkADotCom {
 			System.out.print("Max num: " + maxNum + " - " + "Random num: " + randomNum + " >>> ");
 			
 			if (randomNum >= 0 && randomNum <= maxNum) { // 
-			
 				System.out.println("success");
-			
 			} else { // 
-			
-				System.out.println("fail");
-			
+				System.out.println("failed");
 			}
+		}
+	}
+	
+	private static void testValidateFieldSize(){
+		ArrayList<Ship> shipList = new ArrayList<Ship>();
+		int testNum = 0;
+		
+		// normal
+		try {
+			testNum++;
+			Field field = new Field(10, 10, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// all error
+		try {
+			testNum++;
+			Field field = new Field(3, 50, shipList);
 			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// lower boundary - length - normal
+		try {
+			testNum++;
+			Field field = new Field(5, 10, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// lower boundary - width - normal
+		try {
+			testNum++;
+			Field field = new Field(10, 5, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// upper boundary - length - normal
+		try {
+			testNum++;
+			Field field = new Field(26, 5, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// upper boundary - width - normal
+		try {
+			testNum++;
+			Field field = new Field(5, 26, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// lower boundary - size - normal
+		try {
+			testNum++;
+			Field field = new Field(9, 5, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// upper boundary - size - normal
+		try {
+			testNum++;
+			Field field = new Field(9, 15, shipList);
+		} 
+		catch (IlleagalArgumentException e) { 
+			System.out.println("Case " + testNum + " failed");
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// lower boundary - length - error
+		try {
+			testNum++;
+			Field field = new Field(4, 10, shipList);
+			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// lower boundary - width - error
+		try {
+			testNum++;
+			Field field = new Field(10, 4, shipList);
+			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// upper boundary - length - error
+		try {
+			testNum++;
+			Field field = new Field(27, 5, shipList);
+			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// upper boundary - width - error
+		try {
+			testNum++;
+			Field field = new Field(5, 27, shipList);
+			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// lower boundary - size - error
+		try {
+			testNum++;
+			Field field = new Field(6, 7, shipList);
+			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
+		}
+		
+		// upper boundary - size - error
+		try {
+			testNum++;
+			Field field = new Field(8, 17, shipList);
+			
+			System.out.println("Case " + testNum + " failed");
+		} 
+		catch (IlleagalArgumentException e) { 
+			// success
+		}
+		catch (Exception e) {
+			System.out.println("Case " + testNum + " failed");
 		}
 	}
 }
