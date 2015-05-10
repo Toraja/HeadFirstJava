@@ -1,12 +1,13 @@
 /*
-Method				test code	result
-main
-getRandomIntUpTo	ok			ok
-validateFieldSize	ok			ok
-init
-calcTotalShipNum	ok			ok
-play
-validateInput		
+Method					test code	result
+main	
+getRandomIntUpTo		ok			ok
+validateFieldSize		ok			ok
+init	
+calcTotalShipNum		ok			ok
+play	
+initValidationArrays	
+validateInput			ok
 (test private method through main method one by one)
 */
 
@@ -294,5 +295,73 @@ public class TestSinkADotCom {
 		}
 		
 		System.out.println("### End testCalcTotalShipNum ###");
+	}
+
+	private static void testInitValidationArrays(){
+		System.out.println("### Start testInitValidationArrays ###");
+		
+		Method testMethod = null;
+		try{
+			testMethod = testClass.getDeclaredMethod("initValidationArrays", int.class, int.class);
+		}catch(Exception e){
+			e.printStackTrace();
+			return;
+		}
+		testMethod.setAccessible(true);
+		
+		// test values
+		// invode testMethod
+		// check test result by referring SinkADotCom's class variables
+		
+		System.out.println("### End testInitValidationArrays ###");
+	}
+	
+	private static void testValidateInput(){
+		System.out.println("### Start testValidateInput ###");
+		
+		Method testMethod = null;
+		try{
+			testMethod = testClass.getDeclaredMethod("validateInput", String.class);
+		}catch(Exception e){
+			e.printStackTrace();
+			return;
+		}
+		testMethod.setAccessible(true);
+		
+		// test on 12 x 10 field
+		String[] properInputs = {"C4", "A1", "J1", "A12", "J12", "c4", "a1", "j1", "a12", "j12"};
+		String[] errorInputs = {"B0", "K3", "D13", "S1", "23", "AB", "1A"};
+		
+		// regular case
+		for(int testNum = 0; testNum < properInputs.length; testNum++){
+			boolean valid = false;
+			try{
+				// the return value should be true
+				valid = (boolean)testMethod.invoke(testClass, properInputs[testNum]);
+			}catch(Exception e){
+				System.out.format("Regular " + testFailedMsg, testNum + 1, "");
+				e.printStackTrace();
+			}
+			if(!valid){
+				System.out.format("Regular " + testFailedMsg, testNum + 1, "");
+			}
+		}
+		
+		// error case
+		for(int testNum = 0; testNum < errorInputs.length; testNum++){
+			boolean valid = true;
+			try{
+				// the return value should be false
+				valid = (boolean)testMethod.invoke(testClass, properInputs[testNum]);
+			}catch(Exception e){
+				System.out.format("Error " + testFailedMsg, testNum + 1, "");
+				e.printStackTrace();
+			}
+			if(valid){
+				System.out.format("Error " + testFailedMsg, testNum + 1, "");
+			}
+		}
+		
+		System.out.println("### End testValidateInput ###");
 	}
 }

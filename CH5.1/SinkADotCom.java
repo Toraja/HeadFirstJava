@@ -1,18 +1,23 @@
 /*
-Method				completed
+Method					completed
 main
-getRandomIntUpTo	yes
-validateFieldSize	yes
+getRandomIntUpTo		yes
+validateFieldSize		yes
 init
-calcTotalShipNum	yes
+calcTotalShipNum		yes
 play
-validateInput		
+initValidationArrays	
+validateInput			
 (test private method through main method one by one)
 */
 
 import java.lang.IllegalArgumentException;
+import java.util.Arrays;
 
 public class SinkADotCom{
+	
+	private static String[] charArray;
+	private static String[] numArray;
 	
 	public static void main(String[] args) {
 		
@@ -43,5 +48,18 @@ public class SinkADotCom{
 	private static int calcTotalShipNum(int fieldLength, int fieldWidth){
 		final float fieldShipRatio = 15f;
 		return Math.round(fieldLength * fieldWidth / fieldShipRatio);
+	}
+	
+	private static void initValidationArrays(int fieldLength, int fieldWidth){
+		String[] allCharArray = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+		String[] allNumArray = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26" };
+		
+		charArray = Arrays.copyOf(allCharArray, fieldLength);
+		numArray = Arrays.copyOf(allNumArray, fieldWidth);
+	}
+	
+	public static boolean validateInput(String input){
+		
+		return false;
 	}
 }
