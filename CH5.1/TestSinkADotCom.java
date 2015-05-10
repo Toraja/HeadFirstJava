@@ -2,16 +2,27 @@
 Method				test code	result
 main
 getRandomIntUpTo	ok			ok
-validateFieldSize	
+validateFieldSize	ok
 init
 calcTotalShipNum
 play
 validateInput
 (test private method through main method one by one)
 */
+
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
 public class TestSinkADotCom {
 	public static void main(String[] args) {
 //		testGetRandomIntUpTo();
+		try {
+			testValidateFieldSize();
+		} 
+		catch (Exception e) { 
+			e.printStackTrace();
+		}
+		
 		
 	}
 	
@@ -37,16 +48,18 @@ public class TestSinkADotCom {
 		}
 	}
 	
-	private static void testValidateFieldSize(){
-		ArrayList<Ship> shipList = new ArrayList<Ship>();
+	private static void testValidateFieldSize() throws Exception{
 		int testNum = 0;
+		Class<?> SinkADotComClass = SinkADotCom.class;
+		Method testMethod = SinkADotComClass.getDeclaredMethod("validateFieldSize", int.class, int.class);
+		testMethod.setAccessible(true);
 		
 		// normal
 		try {
 			testNum++;
-			Field field = new Field(10, 10, shipList);
+			testMethod.invoke(SinkADotCom.class, 10, 10);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -56,23 +69,25 @@ public class TestSinkADotCom {
 		// all error
 		try {
 			testNum++;
-			Field field = new Field(3, 50, shipList);
+			testMethod.invoke(SinkADotCom.class, 3, 50);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 		
 		// lower boundary - length - normal
 		try {
 			testNum++;
-			Field field = new Field(5, 10, shipList);
+			testMethod.invoke(SinkADotCom.class, 5, 10);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -82,9 +97,9 @@ public class TestSinkADotCom {
 		// lower boundary - width - normal
 		try {
 			testNum++;
-			Field field = new Field(10, 5, shipList);
+			testMethod.invoke(SinkADotCom.class, 10, 5);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -94,9 +109,9 @@ public class TestSinkADotCom {
 		// upper boundary - length - normal
 		try {
 			testNum++;
-			Field field = new Field(26, 5, shipList);
+			testMethod.invoke(SinkADotCom.class, 26, 5);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -106,9 +121,9 @@ public class TestSinkADotCom {
 		// upper boundary - width - normal
 		try {
 			testNum++;
-			Field field = new Field(5, 26, shipList);
+			testMethod.invoke(SinkADotCom.class, 5, 26);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -118,9 +133,9 @@ public class TestSinkADotCom {
 		// lower boundary - size - normal
 		try {
 			testNum++;
-			Field field = new Field(9, 5, shipList);
+			testMethod.invoke(SinkADotCom.class, 9, 5);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -130,9 +145,9 @@ public class TestSinkADotCom {
 		// upper boundary - size - normal
 		try {
 			testNum++;
-			Field field = new Field(9, 15, shipList);
+			testMethod.invoke(SinkADotCom.class, 9, 15);
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
 		}
 		catch (Exception e) {
@@ -142,85 +157,97 @@ public class TestSinkADotCom {
 		// lower boundary - length - error
 		try {
 			testNum++;
-			Field field = new Field(4, 10, shipList);
+			testMethod.invoke(SinkADotCom.class, 4, 10);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 		
 		// lower boundary - width - error
 		try {
 			testNum++;
-			Field field = new Field(10, 4, shipList);
+			testMethod.invoke(SinkADotCom.class, 10, 4);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 		
 		// upper boundary - length - error
 		try {
 			testNum++;
-			Field field = new Field(27, 5, shipList);
+			testMethod.invoke(SinkADotCom.class, 27, 5);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 		
 		// upper boundary - width - error
 		try {
 			testNum++;
-			Field field = new Field(5, 27, shipList);
+			testMethod.invoke(SinkADotCom.class, 5, 27);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 		
 		// lower boundary - size - error
 		try {
 			testNum++;
-			Field field = new Field(6, 7, shipList);
+			testMethod.invoke(SinkADotCom.class, 6, 7);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 		
 		// upper boundary - size - error
 		try {
 			testNum++;
-			Field field = new Field(8, 17, shipList);
+			testMethod.invoke(SinkADotCom.class, 8, 17);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
-		catch (IlleagalArgumentException e) { 
+		catch (InvocationTargetException e) { 
 			// success
+			System.out.println(testNum + ": " + e.getCause().getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Case " + testNum + " failed");
+			e.printStackTrace();
 		}
 	}
 }
