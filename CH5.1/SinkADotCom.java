@@ -2,11 +2,11 @@
 Method				completed
 main
 getRandomIntUpTo	yes
-validateFieldSize	
+validateFieldSize	yes
 init
-calcTotalShipNum
+calcTotalShipNum	yes
 play
-validateInput
+validateInput		
 (test private method through main method one by one)
 */
 
@@ -38,5 +38,10 @@ public class SinkADotCom{
 		else if(fieldLength * fieldWidth > 135){
 			throw new IllegalArgumentException(String.format(errorMsg2, "big"));
 		}
+	}
+	
+	private static int calcTotalShipNum(int fieldLength, int fieldWidth){
+		final float fieldShipRatio = 15f;
+		return Math.round(fieldLength * fieldWidth / fieldShipRatio);
 	}
 }

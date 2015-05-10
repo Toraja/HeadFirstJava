@@ -2,11 +2,11 @@
 Method				test code	result
 main
 getRandomIntUpTo	ok			ok
-validateFieldSize	ok
+validateFieldSize	ok			ok
 init
-calcTotalShipNum
+calcTotalShipNum	ok			ok
 play
-validateInput
+validateInput		
 (test private method through main method one by one)
 */
 
@@ -14,16 +14,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 public class TestSinkADotCom {
+
+	static String testFailedMsg = "Case %s failed. %s\n";
+	static Class<?> testClass = SinkADotCom.class;
+	
 	public static void main(String[] args) {
-//		testGetRandomIntUpTo();
-		try {
-			testValidateFieldSize();
-		} 
-		catch (Exception e) { 
-			e.printStackTrace();
-		}
+		System.out.println("*** Start TestSinkADotCom *** ");
 		
+		// testGetRandomIntUpTo();
+		// testValidateFieldSize();
+		testCalcTotalShipNum();
 		
+		System.out.println("*** The end of the test ***");
 	}
 	
 	private static void testGetRandomIntUpTo(){
@@ -48,16 +50,24 @@ public class TestSinkADotCom {
 		}
 	}
 	
-	private static void testValidateFieldSize() throws Exception{
+	private static void testValidateFieldSize(){
+	
+		System.out.println("### Start testValidateFieldSize ###");
+	
 		int testNum = 0;
-		Class<?> SinkADotComClass = SinkADotCom.class;
-		Method testMethod = SinkADotComClass.getDeclaredMethod("validateFieldSize", int.class, int.class);
+		Method testMethod = null;
+		try{
+			testMethod = testClass.getDeclaredMethod("validateFieldSize", int.class, int.class);
+		}catch(Exception e){
+			e.printStackTrace();
+			return;
+		}
 		testMethod.setAccessible(true);
 		
 		// normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 10, 10);
+			testMethod.invoke(testClass, 10, 10);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -69,7 +79,7 @@ public class TestSinkADotCom {
 		// all error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 3, 50);
+			testMethod.invoke(testClass, 3, 50);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -85,7 +95,7 @@ public class TestSinkADotCom {
 		// lower boundary - length - normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 5, 10);
+			testMethod.invoke(testClass, 5, 10);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -97,7 +107,7 @@ public class TestSinkADotCom {
 		// lower boundary - width - normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 10, 5);
+			testMethod.invoke(testClass, 10, 5);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -109,7 +119,7 @@ public class TestSinkADotCom {
 		// upper boundary - length - normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 26, 5);
+			testMethod.invoke(testClass, 26, 5);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -121,7 +131,7 @@ public class TestSinkADotCom {
 		// upper boundary - width - normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 5, 26);
+			testMethod.invoke(testClass, 5, 26);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -133,7 +143,7 @@ public class TestSinkADotCom {
 		// lower boundary - size - normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 9, 5);
+			testMethod.invoke(testClass, 9, 5);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -145,7 +155,7 @@ public class TestSinkADotCom {
 		// upper boundary - size - normal
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 9, 15);
+			testMethod.invoke(testClass, 9, 15);
 		} 
 		catch (InvocationTargetException e) { 
 			System.out.println("Case " + testNum + " failed");
@@ -157,7 +167,7 @@ public class TestSinkADotCom {
 		// lower boundary - length - error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 4, 10);
+			testMethod.invoke(testClass, 4, 10);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -173,7 +183,7 @@ public class TestSinkADotCom {
 		// lower boundary - width - error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 10, 4);
+			testMethod.invoke(testClass, 10, 4);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -189,7 +199,7 @@ public class TestSinkADotCom {
 		// upper boundary - length - error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 27, 5);
+			testMethod.invoke(testClass, 27, 5);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -205,7 +215,7 @@ public class TestSinkADotCom {
 		// upper boundary - width - error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 5, 27);
+			testMethod.invoke(testClass, 5, 27);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -221,7 +231,7 @@ public class TestSinkADotCom {
 		// lower boundary - size - error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 6, 7);
+			testMethod.invoke(testClass, 6, 7);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -237,7 +247,7 @@ public class TestSinkADotCom {
 		// upper boundary - size - error
 		try {
 			testNum++;
-			testMethod.invoke(SinkADotCom.class, 8, 17);
+			testMethod.invoke(testClass, 8, 17);
 			
 			System.out.println("Case " + testNum + " failed");
 		} 
@@ -249,5 +259,40 @@ public class TestSinkADotCom {
 			System.out.println("Case " + testNum + " failed");
 			e.printStackTrace();
 		}
+		
+		System.out.println("### End testValidateFieldSize ###");
+	}
+
+	private static void testCalcTotalShipNum(){
+		System.out.println("### Start testCalcTotalShipNum ###");
+		
+		Method testMethod = null;
+		try{
+			testMethod = testClass.getDeclaredMethod("calcTotalShipNum", int.class, int.class);
+		}catch(Exception e){
+			e.printStackTrace();
+			return;
+		}
+		testMethod.setAccessible(true);
+		int[] fieldLengthForTest = {5, 8, 10, 9};
+		int[] fieldWidthForTest = {9, 12, 10, 15};
+		int[] expectedValues = {3, 6, 7, 9};
+		
+		for(int testNum = 0; testNum < expectedValues.length; testNum++){
+			try{
+				// int shipNum = testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]);
+				int shipNum = (int)testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]);
+				testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]);
+				if (shipNum != expectedValues[testNum]){
+					System.out.format(testFailedMsg, testNum + 1, "--- shipNum: " + shipNum);
+				}
+			}catch(Exception e){
+				System.out.format(testFailedMsg, testNum);
+				e.printStackTrace();
+				return;
+			}
+		}
+		
+		System.out.println("### End testCalcTotalShipNum ###");
 	}
 }
