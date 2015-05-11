@@ -6,7 +6,7 @@ validateFieldSize		yes
 init
 calcTotalShipNum		yes
 play
-initValidationArrays	
+initValidationArrays	yes
 validateInput			
 (test private method through main method one by one)
 */
@@ -58,8 +58,16 @@ public class SinkADotCom{
 		numArray = Arrays.copyOf(allNumArray, fieldWidth);
 	}
 	
-	public static boolean validateInput(String input){
+	private static boolean validateInput(String input){
+		if (input == null || input.length() < 2) { // 
+			System.out.println("Invalid input: " + input);
+			return false;
+		}
 		
-		return false;
+		String coordiChar = input.substring(0, 1).toUpperCase();
+		String coordiNum = input.substring(1);
+		boolean validationResult = Arrays.asList(SinkADotCom.charArray).contains(coordiChar) && Arrays.asList(SinkADotCom.numArray).contains(coordiNum);
+		
+		return validationResult;
 	}
 }

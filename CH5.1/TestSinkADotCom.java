@@ -27,8 +27,9 @@ public class TestSinkADotCom {
 		// testGetRandomIntUpTo();
 		// testValidateFieldSize();
 //		testCalcTotalShipNum();
-		testInitValidationArrays();
-		
+//		testInitValidationArrays();
+		testValidateInput();	
+			
 		System.out.println("*** The end of the test ***");
 	}
 	
@@ -352,15 +353,19 @@ public class TestSinkADotCom {
 		System.out.println("### Start testValidateInput ###");
 		
 		Method testMethod = null;
+		Method helperMethod = null;
 		try{
 			testMethod = testClass.getDeclaredMethod("validateInput", String.class);
+			helperMethod = testClass.getDeclaredMethod("initValidationArrays", int.class, int.class);
+			testMethod.setAccessible(true);
+			helperMethod.setAccessible(true);
+			helperMethod.invoke(testClass, 10, 12);
 		}catch(Exception e){
 			e.printStackTrace();
 			return;
 		}
-		testMethod.setAccessible(true);
 		
-		// test on 12 x 10 field
+		// test on 10 x 12 field
 		String[] properInputs = {"C4", "A1", "J1", "A12", "J12", "c4", "a1", "j1", "a12", "j12"};
 		String[] errorInputs = {"B0", "K3", "D13", "S1", "23", "AB", "1A"};
 		
@@ -384,7 +389,7 @@ public class TestSinkADotCom {
 			boolean valid = true;
 			try{
 				// the return value should be false
-				valid = (boolean)testMethod.invoke(testClass, properInputs[testNum]);
+				valid = (boolean)testMethod.invoke(testClass, errorInputs[testNum]);
 			}catch(Exception e){
 				System.out.format("Error " + testFailedMsg, testNum + 1, "");
 				e.printStackTrace();
