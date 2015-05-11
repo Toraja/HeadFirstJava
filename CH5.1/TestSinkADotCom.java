@@ -6,13 +6,15 @@ validateFieldSize		ok			ok
 init	
 calcTotalShipNum		ok			ok
 play	
-initValidationArrays	
+initValidationArrays	ok
 validateInput			ok
 (test private method through main method one by one)
 */
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 public class TestSinkADotCom {
 
@@ -24,7 +26,8 @@ public class TestSinkADotCom {
 		
 		// testGetRandomIntUpTo();
 		// testValidateFieldSize();
-		testCalcTotalShipNum();
+//		testCalcTotalShipNum();
+		testInitValidationArrays();
 		
 		System.out.println("*** The end of the test ***");
 	}
@@ -281,7 +284,6 @@ public class TestSinkADotCom {
 		
 		for(int testNum = 0; testNum < expectedValues.length; testNum++){
 			try{
-				// int shipNum = testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]);
 				int shipNum = (int)testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]);
 				testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]);
 				if (shipNum != expectedValues[testNum]){
@@ -310,8 +312,38 @@ public class TestSinkADotCom {
 		testMethod.setAccessible(true);
 		
 		// test values
-		// invode testMethod
-		// check test result by referring SinkADotCom's class variables
+		int[] fieldLengthForTest = {7, 10, 20};
+		int[] fieldWidthForTest = {15, 10, 6};
+		// invoke testMethod
+		for(int testNum = 0; testNum < fieldLengthForTest.length; testNum++){
+			String[] charArray = null;
+			String[] numArray = null;
+			try {
+				testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]); 
+				
+				// check test result by referring SinkADotCom's class variables
+				Field testField1 = testClass.getDeclaredField("charArray");
+				Field testField2 = testClass.getDeclaredField("numArray");
+				testField1.setAccessible(true);
+				testField2.setAccessible(true);
+
+				charArray = (String[])testField1.get(null);
+				numArray = (String[])testField2.get(null);
+			} 
+			catch (Exception e) { 
+				System.out.format(testFailedMsg, testNum + 1, "");
+				e.printStackTrace();
+			}
+			
+			if (charArray.length != fieldLengthForTest[testNum]) { // 
+				System.out.format(testFailedMsg, testNum + 1, "charArray expected: " + fieldLengthForTest[testNum] + " - actual: " + charArray.length);
+			}
+			if (numArray.length != fieldWidthForTest[testNum]) { // 
+				System.out.format(testFailedMsg, testNum + 1, "numArray expected: " + fieldWidthForTest[testNum] + " - actual: " + numArray.length);
+			}
+			System.out.println(Arrays.toString(charArray));
+			System.out.println(Arrays.toString(numArray));
+		}
 		
 		System.out.println("### End testInitValidationArrays ###");
 	}
