@@ -7,7 +7,7 @@ init
 calcTotalShipNum		yes
 play
 initValidationArrays	yes
-validateInput			
+validateInput			yes
 (test private method through main method one by one)
 */
 
@@ -18,6 +18,7 @@ public class SinkADotCom{
 	
 	private static String[] charArray;
 	private static String[] numArray;
+	private static int numTrial;
 	
 	public static void main(String[] args) {
 		
@@ -66,8 +67,12 @@ public class SinkADotCom{
 		
 		String coordiChar = input.substring(0, 1).toUpperCase();
 		String coordiNum = input.substring(1);
-		boolean validationResult = Arrays.asList(SinkADotCom.charArray).contains(coordiChar) && Arrays.asList(SinkADotCom.numArray).contains(coordiNum);
+		boolean isValid = Arrays.asList(SinkADotCom.charArray).contains(coordiChar) && Arrays.asList(SinkADotCom.numArray).contains(coordiNum);
 		
-		return validationResult;
+		if (isValid) { // 
+			SinkADotCom.numTrial++;
+		}
+		
+		return isValid;
 	}
 }

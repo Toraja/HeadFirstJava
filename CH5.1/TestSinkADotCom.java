@@ -6,9 +6,8 @@ validateFieldSize		ok			ok
 init	
 calcTotalShipNum		ok			ok
 play	
-initValidationArrays	ok
-validateInput			ok
-(test private method through main method one by one)
+initValidationArrays	ok			ok
+validateInput			ok			ok
 */
 
 import java.lang.reflect.Method;
@@ -354,12 +353,15 @@ public class TestSinkADotCom {
 		
 		Method testMethod = null;
 		Method helperMethod = null;
+		Field numTrial = null;
 		try{
 			testMethod = testClass.getDeclaredMethod("validateInput", String.class);
 			helperMethod = testClass.getDeclaredMethod("initValidationArrays", int.class, int.class);
 			testMethod.setAccessible(true);
 			helperMethod.setAccessible(true);
 			helperMethod.invoke(testClass, 10, 12);
+			numTrial = testClass.getDeclaredField("numTrial");
+			numTrial.setAccessible(true);
 		}catch(Exception e){
 			e.printStackTrace();
 			return;
@@ -383,6 +385,18 @@ public class TestSinkADotCom {
 				System.out.format("Regular " + testFailedMsg, testNum + 1, "");
 			}
 		}
+
+		try {
+	
+			if((int)numTrial.get(null) != properInputs.length){
+				System.out.format("Regular " + testFailedMsg, "", "numTrial is not counted properly");
+			}
+			numTrial.set(null, 0);
+	
+		} 
+		catch (Exception e) { 
+			e.printStackTrace();
+		}
 		
 		// error case
 		for(int testNum = 0; testNum < errorInputs.length; testNum++){
@@ -397,6 +411,18 @@ public class TestSinkADotCom {
 			if(valid){
 				System.out.format("Error " + testFailedMsg, testNum + 1, "");
 			}
+		}
+
+		try {
+	
+			if((int)numTrial.get(null) != 0){
+				System.out.format("Error " + testFailedMsg, "", "numTrial is not counted properly");
+			}
+			numTrial.set(null, 0);
+	
+		} 
+		catch (Exception e) { 
+			e.printStackTrace();
 		}
 		
 		System.out.println("### End testValidateInput ###");
