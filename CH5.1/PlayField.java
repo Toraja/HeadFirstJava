@@ -1,3 +1,17 @@
+/*					completed 
+PlayField
+getShipNum			yes
+getFieldLength		yes
+getFieldWidth		yes
+getShipOnCoordinate	
+placeShips
+getRandomLocNum
+isPlacable
+directShip
+checkOnTheEdge
+checkShipOnTheWay
+placeShipComponents	
+ */
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -9,13 +23,25 @@ public class PlayField{
 	private Map<Integer, ShipComponent> shipLocation;
 	
 	private enum Direction{
-		Noway(0), Up(1), Down(2), Right(3), Left(4);
+		Up(1), Down(2), Right(3), Left(4);
 		
 		int value;
 		
 		Direction(int value){
 			this.value = value;
 		}
+	}
+	
+	public int getShipNum(){
+		return this.shipNum;
+	}
+
+	public int getFieldLength(){
+		return this.fieldLength;
+	}
+
+	public int getFieldWidth(){
+		return this.fieldWidth;
 	}
 	
 	private void placeShips(int totalShipNum){
