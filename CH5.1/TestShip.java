@@ -19,7 +19,8 @@ public class TestShip{
 	
 	public static void main(String[] args) {
 //		testGetRandomShipName();
-		testGetHpOfSize();
+//		testGetHpOfSize();
+		testInitShips();
 	}
 	
 	private static void testGetRandomShipName(){
