@@ -4,7 +4,7 @@
 //getName			yes
 //getHp				yes
 //getSize			yes
-//initShips			
+//initShips			yes
 //getRandomShipName	yes
 
 import java.util.ArrayList;
@@ -54,15 +54,23 @@ public class Ship{
 		int shipNumForSize = 0;
 		
 		for(ShipSize shipSize : ShipSize.values()){
-			shipNumForSize = SinkADotCom.getRandomIntUpTo(totalShipNum - createdShipNum);
-			
-			for(int i = 0; i < shipNumForSize; i++){
-				shipList.add(new Ship(shipSize, shipNameList));
+			if(shipSize != ShipSize.Small){
+				shipNumForSize = SinkADotCom.getRandomIntUpTo(totalShipNum - createdShipNum);
+				
+				for(int i = 0; i < shipNumForSize; i++){
+					shipList.add(new Ship(shipSize, shipNameList));
+				}
+				
+				createdShipNum += shipNumForSize;
+			}
+			else{
+				for(int i = 0; i < (totalShipNum - createdShipNum); i++){
+					shipList.add(new Ship(shipSize, shipNameList));
+				}
 			}
 		}
 		
-		
-		return null;
+		return shipList;
 	}
 	
 	private static String getRandomShipName(ArrayList<String> shipNameList){
