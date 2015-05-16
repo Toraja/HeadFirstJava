@@ -4,7 +4,7 @@
 //getName			n/a			n/a
 //getHp				n/a			n/a
 //getSize			n/a			n/a
-//initShips			
+//initShips			ok			ok
 //getRandomShipName	ok			ok
 
 import java.util.ArrayList;
@@ -67,29 +67,37 @@ public class TestShip{
 		System.out.println("### Start testInitShips ###");
 		
 		int[] input = {5, 7, 9};
-		ArrayList<Ship> shipList = new ArrayList<Ship>();
-		int largeShipNum = 0;		
-		int midShipNum = 0;		
-		int smallShipNum = 0;
+		ArrayList<Ship> shipList;
 				
 		for(int i = 0; i < input.length; i++){
+			int largeShipNum = 0;		
+			int midShipNum = 0;		
+			int smallShipNum = 0;
+			
 			shipList = Ship.initShips(input[i]);
 			
 			System.out.println("total number of ship: " + shipList.size());
 			
 			for(Ship ship : shipList){
 				switch(ship.getSize()){
-					case Ship.ShipSize.Large: largeShipNum++; break;
-					case Ship.ShipSize.Mid: midShipNum++; break;
-					case Ship.ShipSize.Small: smallShipNum++; break;
+					case Large: 
+						largeShipNum++;
+						break;
+					case Mid: 
+						midShipNum++; 
+						break;
+					case Small: 
+						smallShipNum++; 
+						break;
 				}
-			
-			System.out.println("the number of large ship" + largeShipNum);
-			System.out.println("the number of mid ship" + midShipNum);
-			System.out.println("the number of small ship" + smallShipNum);
 			}
-		
-			System.out.println("### End testInitShips ###");
+			
+			System.out.println("the number of large ship: " + largeShipNum);
+			System.out.println("the number of mid ship: " + midShipNum);
+			System.out.println("the number of small ship: " + smallShipNum);
+			System.out.println();
 		}
+		
+		System.out.println("### End testInitShips ###");
 	}
 }
