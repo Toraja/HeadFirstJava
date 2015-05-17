@@ -2,23 +2,27 @@
 Method					completed
 main
 getRandomIntUpTo		yes
+convCoordinateToLocNum	
 validateFieldSize		yes
 init
 calcTotalShipNum		yes
 play
 initValidationArrays	yes
 validateInput			yes
-(test private method through main method one by one)
 */
 
 import java.lang.IllegalArgumentException;
 import java.util.Arrays;
+import java.util.List;
 
 public class SinkADotCom{
 	
-	private static String[] charArray;
-	private static String[] numArray;
+	private static List<String> charList;
+	private static List<String> numList;
 	private static int numTrial;
+	private static String coordiChar;
+	private static String coordiNum;
+	private static PlayField playField;
 	
 	public static void main(String[] args) {
 		
@@ -26,6 +30,12 @@ public class SinkADotCom{
 	
 	public static int getRandomIntUpTo(int maxNum){
 		return (int)(Math.random() * (maxNum + 1));
+	}
+	
+	public static int convCoordinateToLocNum(String coodinate){
+		
+		
+		return 0;
 	}
 	
 	private static void validateFieldSize(int fieldLength, int fieldWidth) throws IllegalArgumentException{
@@ -55,8 +65,8 @@ public class SinkADotCom{
 		String[] allCharArray = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 		String[] allNumArray = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26" };
 		
-		charArray = Arrays.copyOf(allCharArray, fieldLength);
-		numArray = Arrays.copyOf(allNumArray, fieldWidth);
+		charList = Arrays.asList(Arrays.copyOf(allCharArray, fieldLength));
+		numList = Arrays.asList(Arrays.copyOf(allNumArray, fieldWidth));
 	}
 	
 	private static boolean validateInput(String input){
@@ -65,9 +75,9 @@ public class SinkADotCom{
 			return false;
 		}
 		
-		String coordiChar = input.substring(0, 1).toUpperCase();
-		String coordiNum = input.substring(1);
-		boolean isValid = Arrays.asList(SinkADotCom.charArray).contains(coordiChar) && Arrays.asList(SinkADotCom.numArray).contains(coordiNum);
+		SinkADotCom.coordiChar = input.substring(0, 1).toUpperCase();
+		SinkADotCom.coordiNum = input.substring(1);
+		boolean isValid = SinkADotCom.charList.contains(coordiChar) && SinkADotCom.numList.contains(coordiNum);
 		
 		if (isValid) { // 
 			SinkADotCom.numTrial++;

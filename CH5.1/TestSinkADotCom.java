@@ -2,6 +2,7 @@
 Method					test code	result
 main	
 getRandomIntUpTo		ok			ok
+convCoordinateToLocNum
 validateFieldSize		ok			ok
 init	
 calcTotalShipNum		ok			ok
@@ -14,6 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
 
 public class TestSinkADotCom {
 
@@ -26,7 +28,7 @@ public class TestSinkADotCom {
 		// testGetRandomIntUpTo();
 		// testValidateFieldSize();
 //		testCalcTotalShipNum();
-//		testInitValidationArrays();
+		testInitValidationArrays();
 		testValidateInput();	
 			
 		System.out.println("*** The end of the test ***");
@@ -52,6 +54,36 @@ public class TestSinkADotCom {
 				System.out.println("failed");
 			}
 		}
+	}
+	
+	private static void testConvCoordinateToLocNum(){
+		System.out.println("### Start testConvCoordinateToLocNum ###");
+
+		// test on 12 x 10 field
+		String[] testInput = {"C3", "e7", "L9"};
+		String[] expectedValues = {"23", "47", "119"};
+		
+		try {
+			Field field = testClass.getDeclaredField("playField");
+			field.setAccessible(true);
+			field.set(new StubPlayField(12, 10));
+		} 
+		catch (Exception e) { 
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i < testInput.length; i++){
+			int locNum = SinkADotCom.convCoordinateToLocNum(testInput.[i]);
+			if (locNum != expectedValues[i]) { // 
+				System.out.printf(failedMsg, "12 x 10 - " + i, "");
+			}
+		}
+		
+		
+		// test on 7 x 7 field
+
+
+		System.out.println("### End testConvCoordinateToLocNum ###");
 	}
 	
 	private static void testValidateFieldSize(){
@@ -316,33 +348,33 @@ public class TestSinkADotCom {
 		int[] fieldWidthForTest = {15, 10, 6};
 		// invoke testMethod
 		for(int testNum = 0; testNum < fieldLengthForTest.length; testNum++){
-			String[] charArray = null;
-			String[] numArray = null;
+			List<String> charList = null;
+			List<String> numList = null;
 			try {
 				testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]); 
 				
 				// check test result by referring SinkADotCom's class variables
-				Field testField1 = testClass.getDeclaredField("charArray");
-				Field testField2 = testClass.getDeclaredField("numArray");
+				Field testField1 = testClass.getDeclaredField("charList");
+				Field testField2 = testClass.getDeclaredField("numList");
 				testField1.setAccessible(true);
 				testField2.setAccessible(true);
 
-				charArray = (String[])testField1.get(null);
-				numArray = (String[])testField2.get(null);
+				charList = (List<String>)testField1.get(null);
+				numList = (List<String>)testField2.get(null);
 			} 
 			catch (Exception e) { 
 				System.out.format(testFailedMsg, testNum + 1, "");
 				e.printStackTrace();
 			}
 			
-			if (charArray.length != fieldLengthForTest[testNum]) { // 
-				System.out.format(testFailedMsg, testNum + 1, "charArray expected: " + fieldLengthForTest[testNum] + " - actual: " + charArray.length);
+			if (charList.size() != fieldLengthForTest[testNum]) { // 
+				System.out.format(testFailedMsg, testNum + 1, "charList expected: " + fieldLengthForTest[testNum] + " - actual: " + charList.size());
 			}
-			if (numArray.length != fieldWidthForTest[testNum]) { // 
-				System.out.format(testFailedMsg, testNum + 1, "numArray expected: " + fieldWidthForTest[testNum] + " - actual: " + numArray.length);
+			if (numList.size() != fieldWidthForTest[testNum]) { // 
+				System.out.format(testFailedMsg, testNum + 1, "numList expected: " + fieldWidthForTest[testNum] + " - actual: " + numList.size());
 			}
-			System.out.println(Arrays.toString(charArray));
-			System.out.println(Arrays.toString(numArray));
+			System.out.println(Arrays.toString(charList.toArray()));
+			System.out.println(Arrays.toString(numList.toArray()));
 		}
 		
 		System.out.println("### End testInitValidationArrays ###");
