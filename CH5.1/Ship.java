@@ -4,6 +4,7 @@
 //getName			yes
 //getHp				yes
 //getSize			yes
+//decrementHp
 //initShips			yes
 //getRandomShipName	yes
 

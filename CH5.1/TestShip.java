@@ -4,13 +4,13 @@
 //getName			n/a			n/a
 //getHp				n/a			n/a
 //getSize			n/a			n/a
+//decrementHp		n/a			n/a
 //initShips			ok			ok
 //getRandomShipName	ok			ok
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.reflect.Method;
-//import Ship;
 
 public class TestShip{
 

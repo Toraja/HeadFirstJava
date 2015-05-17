@@ -3,14 +3,16 @@ PlayField
 getShipNum			yes
 getFieldLength		yes
 getFieldWidth		yes
-getShipOnCoordinate	
+getShipOnLocNum		yes
 placeShips
-getRandomLocNum
-isPlacable
+removeShip			yes
+decrementShipNum	yes
+getRandomLocNum		yes
+isPlacable			yes
 directShip
 checkOnTheEdge
 checkShipOnTheWay
-placeShipComponents	
+buildShip	
  */
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class PlayField{
 	private int fieldLength;
 	private int fieldWidth;
 	private int shipNum;
-	private Map<Integer, ShipComponent> shipLocation;
+	private Map<Integer, Ship> shipLocation;
 	
 	private enum Direction{
 		Up(1), Down(2), Right(3), Left(4);
@@ -44,6 +46,11 @@ public class PlayField{
 		return this.fieldWidth;
 	}
 	
+	private Ship getShipOnLocNum(int locNum){
+		return shipLocation.get(locNum);
+	}
+	
+/* 	
 	private void placeShips(int totalShipNum){
 //		ArrayList<Integer> locNumList = new ArrayList<Integer>();
 		final int shipTypeNum = Ship.ShipSize.values().length; // 3
@@ -77,19 +84,24 @@ public class PlayField{
 				
 				Direction direction = directShip(locationNum, shipSizeToCreate);
 				
-				placeShipComponents(ship, locationNum, direction, shipSizeToCreate);
+				buildShip(ship, locationNum, direction, shipSizeToCreate);
 			}
 			
 		}
 		
 	}
+ */	
+ 
+	public void removeShip(int locNum){
+		shipLocation.remove(locNum);
+	}
+	
+	public void decrementShipNum(){
+		this.shipNum--;
+	}
 	
 	private int getRandomLocNum(){
-		int x = (int)(Math.random() * fieldWidth) + 1;
-		int y = (int)(Math.random() * fieldLength) + 1;
-		int locNum  = (y * fieldWidth + x);
-		
-		return locNum;
+		return (int)(Math.random() * (this.fieldLength * this.fieldWidth)) + 1;
 	}
 	
 	private boolean isPlacable(int locNum){
@@ -101,7 +113,7 @@ public class PlayField{
 		return null;
 	}
 	
-	private void placeShipComponents(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
+	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
 		// TODO implement
 	}
 }
