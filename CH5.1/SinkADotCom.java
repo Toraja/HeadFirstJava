@@ -14,6 +14,8 @@ validateInput			yes
 import java.lang.IllegalArgumentException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class SinkADotCom{
 	
@@ -23,6 +25,7 @@ public class SinkADotCom{
 	private static String coordiChar;
 	private static String coordiNum;
 	private static PlayField playField;
+	private static Map<String, Integer> charToNumMap = new HashMap<String, Integer>();
 	
 	public static void main(String[] args) {
 		
@@ -32,10 +35,12 @@ public class SinkADotCom{
 		return (int)(Math.random() * (maxNum + 1));
 	}
 	
-	public static int convCoordinateToLocNum(String coodinate){
-		
-		
-		return 0;
+	public static int convCoordinateToLocNum(){
+		int x = Integer.parseInt(SinkADotCom.coordiNum);
+		int y = SinkADotCom.charList.indexOf(SinkADotCom.coordiChar);
+		int locNum = y * SinkADotCom.playField.getFieldWidth() + x;
+
+		return locNum;
 	}
 	
 	private static void validateFieldSize(int fieldLength, int fieldWidth) throws IllegalArgumentException{
@@ -65,8 +70,12 @@ public class SinkADotCom{
 		String[] allCharArray = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 		String[] allNumArray = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26" };
 		
-		charList = Arrays.asList(Arrays.copyOf(allCharArray, fieldLength));
-		numList = Arrays.asList(Arrays.copyOf(allNumArray, fieldWidth));
+		SinkADotCom.charList = Arrays.asList(Arrays.copyOf(allCharArray, fieldLength));
+		SinkADotCom.numList = Arrays.asList(Arrays.copyOf(allNumArray, fieldWidth));
+		
+//		for(int i = 0; i < SinkADotCom.charList.size(); i++){
+//			SinkADotCom.charToNumMap.put(SinkADotCom.charList.get(i), i + 1);
+//		}
 	}
 	
 	private static boolean validateInput(String input){

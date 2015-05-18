@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class TestSinkADotCom {
 
@@ -68,14 +69,21 @@ public class TestSinkADotCom {
 		spf.setFieldLengthAndWidth(12, 10);
 		
 		try {
+			Method helperMethod1 = testClass.getDeclaredMethod("initValidationArrays", int.class, int.class);
+			Method helperMethod2 = testClass.getDeclaredMethod("validateInput", String.class);
+			helperMethod1.setAccessible(true);
+			helperMethod2.setAccessible(true);
+			helperMethod1.invoke(testClass, 12, 10);
+			
 			Field field = testClass.getDeclaredField("playField");
 			field.setAccessible(true);
 			field.set(testClass, spf);
 
 			for(int i = 0; i < testInput.length; i++){
-				int locNum = SinkADotCom.convCoordinateToLocNum(testInput[i]);
+				helperMethod2.invoke(testClass, testInput[i]);
+				int locNum = SinkADotCom.convCoordinateToLocNum();
 				if (locNum != expectedValues[i]) { // 
-					System.out.printf(testFailedMsg, "12 x 10 - " + (i + 1), " " + locNum);
+					System.out.printf(testFailedMsg, "12 x 10 - " + (i + 1), " expedted: " + expectedValues[i] + " - actual: " + locNum);
 				}
 			}
 		} 
@@ -83,7 +91,7 @@ public class TestSinkADotCom {
 			e.printStackTrace();
 		}
 		
-
+		
 		
 		
 		// test on 7 x 7 field
@@ -356,17 +364,21 @@ public class TestSinkADotCom {
 		for(int testNum = 0; testNum < fieldLengthForTest.length; testNum++){
 			List<String> charList = null;
 			List<String> numList = null;
+			Map<String, Integer> charToNumMap = null;
 			try {
 				testMethod.invoke(testClass, fieldLengthForTest[testNum], fieldWidthForTest[testNum]); 
 				
 				// check test result by referring SinkADotCom's class variables
 				Field testField1 = testClass.getDeclaredField("charList");
 				Field testField2 = testClass.getDeclaredField("numList");
+				Field testField3 = testClass.getDeclaredField("charToNumMap");
 				testField1.setAccessible(true);
 				testField2.setAccessible(true);
+				testField3.setAccessible(true);
 
 				charList = (List<String>)testField1.get(null);
 				numList = (List<String>)testField2.get(null);
+				charToNumMap = (Map<String, Integer>)testField3.get(null);
 			} 
 			catch (Exception e) { 
 				System.out.format(testFailedMsg, testNum + 1, "");
@@ -379,8 +391,12 @@ public class TestSinkADotCom {
 			if (numList.size() != fieldWidthForTest[testNum]) { // 
 				System.out.format(testFailedMsg, testNum + 1, "numList expected: " + fieldWidthForTest[testNum] + " - actual: " + numList.size());
 			}
-			System.out.println(Arrays.toString(charList.toArray()));
-			System.out.println(Arrays.toString(numList.toArray()));
+			if (charToNumMap.size() != fieldLengthForTest[testNum]) { // 
+				System.out.format(testFailedMsg, testNum + 1, "charToNumMap expected: " + fieldLengthForTest[testNum] + " - actual: " + charToNumMap.size());
+			}
+			System.out.println("charList: " + Arrays.toString(charList.toArray()));
+			System.out.println("numList: " + Arrays.toString(numList.toArray()));
+			System.out.println("map: " + Arrays.toString(charToNumMap.entrySet().toArray()));
 		}
 		
 		System.out.println("### End testInitValidationArrays ###");
