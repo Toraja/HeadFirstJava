@@ -28,8 +28,9 @@ public class TestSinkADotCom {
 		// testGetRandomIntUpTo();
 		// testValidateFieldSize();
 //		testCalcTotalShipNum();
-		testInitValidationArrays();
-		testValidateInput();	
+//		testInitValidationArrays();
+//		testValidateInput();	
+		testConvCoordinateToLocNum();
 			
 		System.out.println("*** The end of the test ***");
 	}
@@ -61,23 +62,28 @@ public class TestSinkADotCom {
 
 		// test on 12 x 10 field
 		String[] testInput = {"C3", "e7", "L9"};
-		String[] expectedValues = {"23", "47", "119"};
+		int[] expectedValues = {23, 47, 119};
+		
+		StubPlayField spf = new StubPlayField();
+		spf.setFieldLengthAndWidth(12, 10);
 		
 		try {
 			Field field = testClass.getDeclaredField("playField");
 			field.setAccessible(true);
-			field.set(new StubPlayField(12, 10));
+			field.set(testClass, spf);
+
+			for(int i = 0; i < testInput.length; i++){
+				int locNum = SinkADotCom.convCoordinateToLocNum(testInput[i]);
+				if (locNum != expectedValues[i]) { // 
+					System.out.printf(testFailedMsg, "12 x 10 - " + (i + 1), " " + locNum);
+				}
+			}
 		} 
 		catch (Exception e) { 
 			e.printStackTrace();
 		}
 		
-		for(int i = 0; i < testInput.length; i++){
-			int locNum = SinkADotCom.convCoordinateToLocNum(testInput.[i]);
-			if (locNum != expectedValues[i]) { // 
-				System.out.printf(failedMsg, "12 x 10 - " + i, "");
-			}
-		}
+
 		
 		
 		// test on 7 x 7 field
