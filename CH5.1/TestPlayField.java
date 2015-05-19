@@ -8,9 +8,9 @@ placeShips
 removeShip			n/a
 decrementShipNum	n/a
 getRandomLocNum		ok
-isPlaceable
+isPlaceable			n/a
 directShip
-checkOnTheEdge
+checkOnTheEdge		
 checkShipOnTheWay
 buildShip	
  */

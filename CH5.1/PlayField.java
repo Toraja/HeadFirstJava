@@ -10,7 +10,7 @@ decrementShipNum	yes
 getRandomLocNum		yes
 isPlaceable			yes
 directShip
-checkOnTheEdge
+checkOnTheEdge		yes
 checkShipOnTheWay
 buildShip	
  */
@@ -114,8 +114,24 @@ public class PlayField{
 	}
 	
 	private ArrayList<Direction> checkOnTheEdge(int locNum, Ship.ShipSize shipSize){
-		// TODO implement
-		return null;		
+		ArrayList<Direction> availableDirections = new ArrayList<Direction>();
+		
+		int x = (locNum % this.fieldWidth == 0) ? this.fieldWidth : locNum % this.fieldWidth;
+		int y = (locNum % this.fieldWidth == 0) ? locNum / this.fieldWidth : (int)(locNum / this.fieldWidth) + 1;
+		
+		// check upper edge
+		if(y >= shipSize.getHpOfSize()) availableDirections.add(Direction.Up);
+		
+		// check lower edge
+		if(this.fieldLength - (y - 1) >= shipSize.getHpOfSize()) availableDirections.add(Direction.Down);
+
+		//check right edge
+		if(this.fieldWidth - (x - 1) >= shipSize.getHpOfSize()) availableDirections.add(Direction.Right);
+		
+		// check left edge
+		if(x >= shipSize.getHpOfSize()) availableDirections.add(Direction.Left);
+		
+		return availableDirections;
 	}
 	
 	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){

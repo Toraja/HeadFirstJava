@@ -25,7 +25,7 @@ public class Ship{
 			this.hp = hp;
 		}
 		
-		private int getHpOfSize(){
+		public int getHpOfSize(){
 			return this.hp;
 		}
 	}
