@@ -2,7 +2,7 @@
 Method					completed
 main
 getRandomIntUpTo		yes
-convCoordinateToLocNum	
+convCoordinateToLocNum	yes
 validateFieldSize		yes
 init
 calcTotalShipNum		yes
@@ -40,7 +40,7 @@ public class SinkADotCom{
 		int y = SinkADotCom.charList.indexOf(SinkADotCom.coordiChar);
 		int locNum = y * SinkADotCom.playField.getFieldWidth() + x;
 
-		return locNum;
+			return locNum;
 	}
 	
 	private static void validateFieldSize(int fieldLength, int fieldWidth) throws IllegalArgumentException{

@@ -2,7 +2,7 @@
 Method					test code	result
 main	
 getRandomIntUpTo		ok			ok
-convCoordinateToLocNum
+convCoordinateToLocNum	ok			ok
 validateFieldSize		ok			ok
 init	
 calcTotalShipNum		ok			ok
@@ -61,14 +61,14 @@ public class TestSinkADotCom {
 	private static void testConvCoordinateToLocNum(){
 		System.out.println("### Start testConvCoordinateToLocNum ###");
 
-		// test on 12 x 10 field
-		String[] testInput = {"C3", "e7", "L9"};
-		int[] expectedValues = {23, 47, 119};
-		
-		StubPlayField spf = new StubPlayField();
-		spf.setFieldLengthAndWidth(12, 10);
-		
 		try {
+			// test on 12 x 10 field
+			String[] testInput = {"C3", "e7", "L9"};
+			int[] expectedValues = {23, 47, 119};
+		
+			StubPlayField spf = new StubPlayField();
+			spf.setFieldLengthAndWidth(12, 10);
+		
 			Method helperMethod1 = testClass.getDeclaredMethod("initValidationArrays", int.class, int.class);
 			Method helperMethod2 = testClass.getDeclaredMethod("validateInput", String.class);
 			helperMethod1.setAccessible(true);
@@ -86,16 +86,26 @@ public class TestSinkADotCom {
 					System.out.printf(testFailedMsg, "12 x 10 - " + (i + 1), " expedted: " + expectedValues[i] + " - actual: " + locNum);
 				}
 			}
+			
+			// test on 7 x 7 field
+			String[] testInput2 = {"C3", "d6", "f7"};
+			int[] expectedValues2 = {17, 27, 42};
+		
+			spf.setFieldLengthAndWidth(7, 7);
+			helperMethod1.invoke(testClass, 7, 7);
+			field.set(testClass, spf);
+			
+			for(int i = 0; i < testInput2.length; i++){
+				helperMethod2.invoke(testClass, testInput2[i]);
+				int locNum = SinkADotCom.convCoordinateToLocNum();
+				if (locNum != expectedValues2[i]) { // 
+					System.out.printf(testFailedMsg, "7 x 7 - " + (i + 1), " expedted: " + expectedValues2[i] + " - actual: " + locNum);
+				}
+			}
 		} 
 		catch (Exception e) { 
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		// test on 7 x 7 field
-
 
 		System.out.println("### End testConvCoordinateToLocNum ###");
 	}

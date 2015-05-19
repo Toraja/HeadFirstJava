@@ -4,7 +4,7 @@
 //getName			yes
 //getHp				yes
 //getSize			yes
-//decrementHp
+//decrementHp		yes
 //initShips			yes
 //getRandomShipName	yes
 
@@ -46,6 +46,10 @@ public class Ship{
 
 	public ShipSize getSize(){
 		return this.size;
+	}
+	
+	public void decrementHp(){
+		this.hp--;
 	}
 	
 	public static ArrayList<Ship> initShips(int totalShipNum){

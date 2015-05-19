@@ -8,7 +8,7 @@ placeShips
 removeShip			yes
 decrementShipNum	yes
 getRandomLocNum		yes
-isPlacable			yes
+isPlaceable			yes
 directShip
 checkOnTheEdge
 checkShipOnTheWay
@@ -77,7 +77,7 @@ public class PlayField{
 				while(true){ // get random location num until the location is empty
 					locationNum = getRandomLocNum();
 					
-					if (isPlacable(locationNum)){
+					if (isPlaceable(locationNum)){
 						break;
 					}
 				}
@@ -104,13 +104,18 @@ public class PlayField{
 		return (int)(Math.random() * (this.fieldLength * this.fieldWidth)) + 1;
 	}
 	
-	private boolean isPlacable(int locNum){
+	private boolean isPlaceable(int locNum){
 		return !shipLocation.containsKey(locNum);	
 	}
 	
 	private Direction directShip(int locNum, Ship.ShipSize shipSize){
 		// TODO implement
 		return null;
+	}
+	
+	private ArrayList<Direction> checkOnTheEdge(int locNum, Ship.ShipSize shipSize){
+		// TODO implement
+		return null;		
 	}
 	
 	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
