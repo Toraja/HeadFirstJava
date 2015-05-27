@@ -101,7 +101,6 @@ import java.lang.reflect.Field;
 			Method testMethod = testClass.getDeclaredMethod("checkOnTheEdge");
 			testMethod.setAccessible(true);
 
-			int[] testInput1 = {1, 8, 57, 64}; // every corner 
 			Direction[] UR = {Direction.Up, Direction.Right};
 			Direction[] UL = {Direction.Up, Direction.Left};
 			Direction[] DR = {Direction.Down, Direction.Right};
@@ -111,6 +110,7 @@ import java.lang.reflect.Field;
 
 			// test for each corner for each size
 			for(int i = 0; i < ShipSize.values().length; i++){
+				int[] testInput1 = {1, 8, 57, 64}; // every corner 
 				for(int j = 0; j < testInput1.length; j++){
 					ArrayList<Direction> actualResult = testMethod.invoke(playField, testInput[j], ShipSize.values()[i]);
 					if(! Arrays.equals(expectedValue1[j], actualResult.toArray()){
@@ -125,8 +125,50 @@ import java.lang.reflect.Field;
 
 			// test for upper edge
 			testSucceeded = true;
+			for(int i = 0; i < ShipSize.values().length; i++){
+				int[] testInputUS = {
+				for(int j = 0; j < testInputUS.length; j++){
+					a
+				}
+			}
 
 		System.out.println("### End testCheckOnTheEdge ###");
+	}
+
+	private static int[] generateTestLocNum(int fieldLength, int fieldWidth, int sizeValue, boolean isCorner, boolean limited){
+		
+		int adjuster = 0;
+		if(limited){
+			sizeValue = sizeValue - 1;
+		}
+
+		int[] testInput = new int[4];
+		if(isCorner){
+			int[0] = fieldWidth * (sizeValue - 1) + sizeValue; // upper left corner
+			int[1] = fieldWidth * (sizeValue) - (sizeValue - 1); // upper right corner
+			int[2] = fieldWidth * (fieldLength - sizeValue) + sizeValue // lower left corner
+			int[3] = fieldWidth * (fieldLength - (sizeValue - 1)) - (sizeValue - 1);
+		}
+		else{
+			//
+		}
+
+		switch(positionNum){
+			case 0: // corner
+				// do nothing
+				break;
+			case 1: // upper
+			case 2: // lower
+				adjustIndex = (int)(fieldWidth / 2);
+				break;
+			case 3: // right
+			case 4: // left
+				adjustIndex = (int)(fieldLength / 2);
+				break;
+			default:
+				System.out.println("invalid value for param \"positionNum\"");
+				break;
+		}
 	}
 
 	private static void testCheckShipOnTheWay(){
