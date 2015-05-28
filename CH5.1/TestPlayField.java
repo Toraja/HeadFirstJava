@@ -17,7 +17,9 @@ buildShip
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
- 
+import java.util.Arrays;
+import java.util.ArrayList;
+
  public class TestPlayField{
  
 	static Class<?> testClass = PlayField.class;
@@ -28,6 +30,7 @@ import java.lang.reflect.Field;
 		
 //		testGetRandomLocNum();
 		testCheckOnTheEdge();
+		System.out.println(Arrays.toString(generateTestLocNum(8, 8, 3, true, false)));
 
 		System.out.println("### End TestPlayField ###");
 	}
@@ -101,20 +104,20 @@ import java.lang.reflect.Field;
 			Method testMethod = testClass.getDeclaredMethod("checkOnTheEdge");
 			testMethod.setAccessible(true);
 
-			Direction[] UR = {Direction.Up, Direction.Right};
-			Direction[] UL = {Direction.Up, Direction.Left};
-			Direction[] DR = {Direction.Down, Direction.Right};
-			Direction[] DL = {Direction.Down, Direction.Left};
-			Direction[][] expectedValue1 = {DR, DL, UR, UL};
+			PlayField.Direction[] UR = {PlayField.PlayField.Direction.Up, PlayField.PlayField.Direction.Right};
+			PlayField.Direction[] UL = {PlayField.Direction.Up, PlayField.Direction.Left};
+			PlayField.Direction[] DR = {PlayField.Direction.Down, PlayField.Direction.Right};
+			PlayField.Direction[] DL = {PlayField.Direction.Down, PlayField.Direction.Left};
+			PlayField.Direction[][] expectedValue1 = {DR, DL, UR, UL};
 			boolean testSucceeded = true;
 
-			// test for each corner for each size
-			for(int i = 0; i < ShipSize.values().length; i++){
-				int[] testInput1 = {1, 8, 57, 64}; // every corner 
-				for(int j = 0; j < testInput1.length; j++){
-					ArrayList<Direction> actualResult = testMethod.invoke(playField, testInput[j], ShipSize.values()[i]);
-					if(! Arrays.equals(expectedValue1[j], actualResult.toArray()){
-						System.out.format(testFailedMsg, "corner " + ShipSize.values()[i] + " " + j, "");
+			// test for each corner for each size (non-limited)
+			for(int i = 0; i < Ship.ShipSize.values().length; i++){
+				int[] testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i], true, false);
+				for(int j = 0; j < testInput.length; j++){
+					ArrayList<PlayField.Direction> actualResult = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, testInput[j], Ship.ShipSize.values()[i]);
+					if(! Arrays.equals(expectedValue1[j], actualResult.toArray())){
+						System.out.format(testFailedMsg, "corner " + Ship.ShipSize.values()[i] + " " + j, "");
 						testSucceeded = false;
 					}
 				}
@@ -123,15 +126,17 @@ import java.lang.reflect.Field;
 				System.out.println("test for corner succeeded");
 			}
 
-			// test for upper edge
+			// test for the each edge (non-limited)
 			testSucceeded = true;
-			for(int i = 0; i < ShipSize.values().length; i++){
-				int[] testInputUS = {
-				for(int j = 0; j < testInputUS.length; j++){
-					a
+			for(int i = 0; i < Ship.ShipSize.values().length; i++){
+				int[] testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i].getHpOfSize(), false, false);
+				for(int j = 0; j < testInput.length; j++){
+					// TODO implement
 				}
 			}
-
+		}catch(Exception e){
+			// TODO implement
+		}
 		System.out.println("### End testCheckOnTheEdge ###");
 	}
 
@@ -144,31 +149,19 @@ import java.lang.reflect.Field;
 
 		int[] testInput = new int[4];
 		if(isCorner){
-			int[0] = fieldWidth * (sizeValue - 1) + sizeValue; // upper left corner
-			int[1] = fieldWidth * (sizeValue) - (sizeValue - 1); // upper right corner
-			int[2] = fieldWidth * (fieldLength - sizeValue) + sizeValue // lower left corner
-			int[3] = fieldWidth * (fieldLength - (sizeValue - 1)) - (sizeValue - 1);
+			testInput[0] = fieldWidth * (sizeValue - 1) + sizeValue; // upper left corner
+			testInput[1] = fieldWidth * sizeValue - (sizeValue - 1); // upper right corner
+			testInput[2] = fieldWidth * (fieldLength - sizeValue) + sizeValue; // bottom left corner
+			testInput[3] = fieldWidth * (fieldLength - (sizeValue - 1)) - (sizeValue - 1); // bottom right corner
 		}
 		else{
-			//
+			testInput[0] = fieldWidth * (sizeValue - 1) + (fieldWidth / 2); // upper edge
+			testInput[1] = fieldWidth * (int)(fieldLength / 2) + sizeValue; // left edge
+			testInput[2] = fieldWidth * (int)(fieldLength / 2) - (sizeValue - 1); // right edge
+			testInput[3] = fieldWidth * (fieldLength - sizeValue) + (int)(fieldWidth / 2); // bottom edge
 		}
 
-		switch(positionNum){
-			case 0: // corner
-				// do nothing
-				break;
-			case 1: // upper
-			case 2: // lower
-				adjustIndex = (int)(fieldWidth / 2);
-				break;
-			case 3: // right
-			case 4: // left
-				adjustIndex = (int)(fieldLength / 2);
-				break;
-			default:
-				System.out.println("invalid value for param \"positionNum\"");
-				break;
-		}
+		return testInput;
 	}
 
 	private static void testCheckShipOnTheWay(){
