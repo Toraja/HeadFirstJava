@@ -7,10 +7,10 @@ getShipOnLocNum		n/a
 placeShips
 removeShip			n/a
 decrementShipNum	n/a
-getRandomLocNum		ok
+getRandomLocNum		ok			ok
 isPlaceable			n/a
 directShip
-checkOnTheEdge		
+checkOnTheEdge		ok			ok
 checkShipOnTheWay
 buildShip	
  */
@@ -30,16 +30,11 @@ import java.util.ArrayList;
 		
 //		testGetRandomLocNum();
 		testCheckOnTheEdge();
-		System.out.println(Arrays.toString(generateTestLocNum(8, 8, 3, true, false)));
-
+		
 		System.out.println("### End TestPlayField ###");
 	}
  
 	private static void testPlayField(){
-
-	}
-
-	private static void testGetShipOnCoordinate(){
 
 	}
 
@@ -84,10 +79,6 @@ import java.util.ArrayList;
 		System.out.println("### End testGetRandomLocNum ###");
 	}
 
-	private static void testIsPlaceable(){
-
-	}
-
 	private static void testDirectShip(){
 
 	}
@@ -95,47 +86,57 @@ import java.util.ArrayList;
 	private static void testCheckOnTheEdge(){
 		System.out.println("### Start testCheckOnTheEdge ###");
 		
-		
+	
 		try{
 			StubPlayField spf = new StubPlayField();
 			spf.setFieldLengthAndWidth(8, 8);
 			PlayField playField = spf;
 			
-			Method testMethod = testClass.getDeclaredMethod("checkOnTheEdge");
+			Method testMethod = testClass.getDeclaredMethod("checkOnTheEdge", int.class, Ship.ShipSize.class);
 			testMethod.setAccessible(true);
+			int[] testInput;
 
-			PlayField.Direction[] UR = {PlayField.PlayField.Direction.Up, PlayField.PlayField.Direction.Right};
-			PlayField.Direction[] UL = {PlayField.Direction.Up, PlayField.Direction.Left};
-			PlayField.Direction[] DR = {PlayField.Direction.Down, PlayField.Direction.Right};
-			PlayField.Direction[] DL = {PlayField.Direction.Down, PlayField.Direction.Left};
-			PlayField.Direction[][] expectedValue1 = {DR, DL, UR, UL};
-			boolean testSucceeded = true;
-
-			// test for each corner for each size (non-limited)
+			// corner
 			for(int i = 0; i < Ship.ShipSize.values().length; i++){
-				int[] testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i], true, false);
+				System.out.println("Ship size: " + Ship.ShipSize.values()[i]);
+				// case 1
+				System.out.println("Test case: 8 x 8 * corner * non-limited");
+				testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i].getHpOfSize(), true, false);
 				for(int j = 0; j < testInput.length; j++){
-					ArrayList<PlayField.Direction> actualResult = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, testInput[j], Ship.ShipSize.values()[i]);
-					if(! Arrays.equals(expectedValue1[j], actualResult.toArray())){
-						System.out.format(testFailedMsg, "corner " + Ship.ShipSize.values()[i] + " " + j, "");
-						testSucceeded = false;
-					}
+					System.out.print("LocNum: " + testInput[j] + " - Directions: ");
+					System.out.println(Arrays.toString(((ArrayList<?>)testMethod.invoke(playField, testInput[j], Ship.ShipSize.values()[i])).toArray()));
+				}
+
+				// case 2
+				System.out.println("Test case: 8 x 8 * corner * limited");
+				testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i].getHpOfSize(), true, true);
+				for(int j = 0; j < testInput.length; j++){
+					System.out.print("LocNum: " + testInput[j] + " - Directions: ");
+					System.out.println(Arrays.toString(((ArrayList<?>)testMethod.invoke(playField, testInput[j], Ship.ShipSize.values()[i])).toArray()));
 				}
 			}
-			if(testSucceeded){
-				System.out.println("test for corner succeeded");
-			}
 
-			// test for the each edge (non-limited)
-			testSucceeded = true;
+			// edge
 			for(int i = 0; i < Ship.ShipSize.values().length; i++){
-				int[] testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i].getHpOfSize(), false, false);
+				System.out.println("Ship size: " + Ship.ShipSize.values()[i]);
+				// case 3
+				System.out.println("Test case: 8 x 8 * edge * non-limited");
+				testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i].getHpOfSize(), false, false);
 				for(int j = 0; j < testInput.length; j++){
-					// TODO implement
+					System.out.print("LocNum: " + testInput[j] + " - Directions: ");
+					System.out.println(Arrays.toString(((ArrayList<?>)testMethod.invoke(playField, testInput[j], Ship.ShipSize.values()[i])).toArray()));
+				}
+
+				// case 4
+				System.out.println("Test case: 8 x 8 * edge * limited");
+				testInput = generateTestLocNum(8, 8, Ship.ShipSize.values()[i].getHpOfSize(), false, true);
+				for(int j = 0; j < testInput.length; j++){
+					System.out.print("LocNum: " + testInput[j] + " - Directions: ");
+					System.out.println(Arrays.toString(((ArrayList<?>)testMethod.invoke(playField, testInput[j], Ship.ShipSize.values()[i])).toArray()));
 				}
 			}
 		}catch(Exception e){
-			// TODO implement
+			e.printStackTrace();
 		}
 		System.out.println("### End testCheckOnTheEdge ###");
 	}

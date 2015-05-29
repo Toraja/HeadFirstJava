@@ -135,6 +135,6 @@ public class PlayField{
 	}
 	
 	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
-		// TODO implement
+		// TODO implement!
 	}
 }
