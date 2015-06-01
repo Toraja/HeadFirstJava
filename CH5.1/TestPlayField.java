@@ -29,8 +29,9 @@ import java.util.ArrayList;
 		System.out.println("### Start TestPlayField ###");
 		
 //		testGetRandomLocNum();
-		testCheckOnTheEdge();
-		
+		// testCheckOnTheEdge();
+		testBuildShip();
+
 		System.out.println("### End TestPlayField ###");
 	}
  
@@ -169,7 +170,29 @@ import java.util.ArrayList;
 
 	}
 
-	private static void testPlaceShipComponents(){
+	private static void testBuildShip(){
+			System.out.println("### Start testBuildShip ###");
 
+			StubPlayField spf = new StubPlayField();
+			spf.setFieldLengthAndWidth(8, 8);
+			PlayField playField = spf;
+			
+			try{
+				Method testMethod = testClass.getDeclaredMethod("buildShip", Ship.class, int.class, PlayField.Direction.class, Ship.ShipSize.class);
+				testMethod.setAccessible(true);
+				Field shipLocation = testClass.getDeclaredField("shipLocation");
+				shipLocation.setAccessible(true);
+				//use getConstructor method to publicize Ship's constructor
+				ArrayList<Ship> shipList = Ship.initShips(1);
+				for
+					for(Direction direction : PlayField.Direction.value()){
+						System.out.println("Current direction: " + direction);
+						testMethod.invoke(playField, , 28, direction, 
+					}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			System.out.println("### End testBuildShip ###");
 	}
  }

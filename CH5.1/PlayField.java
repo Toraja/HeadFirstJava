@@ -24,7 +24,7 @@ public class PlayField{
 	private int shipNum;
 	private Map<Integer, Ship> shipLocation;
 	
-	private enum Direction{
+	enum Direction{
 		Up(1), Down(2), Right(3), Left(4);
 		
 		int value;
