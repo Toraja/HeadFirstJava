@@ -22,7 +22,7 @@ public class PlayField{
 	private int fieldLength;
 	private int fieldWidth;
 	private int shipNum;
-	private Map<Integer, Ship> shipLocation;
+	private Map<Integer, Ship> shipLocation = new HashMap<Integer, Ship>();
 	
 	enum Direction{
 		Up(1), Down(2), Right(3), Left(4);

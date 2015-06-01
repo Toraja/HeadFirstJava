@@ -17,8 +17,11 @@ buildShip
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
  public class TestPlayField{
  
@@ -182,13 +185,22 @@ import java.util.ArrayList;
 				testMethod.setAccessible(true);
 				Field shipLocation = testClass.getDeclaredField("shipLocation");
 				shipLocation.setAccessible(true);
-				//use getConstructor method to publicize Ship's constructor
-				ArrayList<Ship> shipList = Ship.initShips(1);
-				for
-					for(Direction direction : PlayField.Direction.value()){
+				Constructor shipConst = Ship.class.getDeclaredConstructor(Ship.ShipSize.class, ArrayList.class);
+				shipConst.setAccessible(true);
+				ArrayList<String> shipNameList = new ArrayList<String>();
+				shipNameList.add("Google.com");
+				Ship ship = null;
+				for(Ship.ShipSize shipSize : Ship.ShipSize.values()){ // for each ship size
+					ship = (Ship)shipConst.newInstance(shipSize, shipNameList);
+					shipNameList.add("Google.com");
+					System.out.println("Current ship size: " + shipSize);
+ 					for(PlayField.Direction direction : PlayField.Direction.values()){ // test each direction
 						System.out.println("Current direction: " + direction);
-						testMethod.invoke(playField, , 28, direction, 
+						testMethod.invoke(playField, ship, 28, direction, shipSize);
+						System.out.println(((Map)(shipLocation.get(playField))).entrySet());
+						shipLocation.set(playField, new HashMap<Integer, Ship>());
 					}
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
