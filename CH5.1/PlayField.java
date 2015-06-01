@@ -13,6 +13,7 @@ directShip
 checkOnTheEdge		yes
 checkShipOnTheWay
 buildShip	
+getIncIdx			yes
  */
 import java.util.HashMap;
 import java.util.Map;
@@ -135,6 +136,26 @@ public class PlayField{
 	}
 	
 	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
-		// TODO implement!
+		int idx = getIncIdx(direction);
+		for(int i = 0; i < shipSize.getHpOfSize(); i++){
+			shipLocation.put(locNum + i * idx, ship);
+		}
+	}
+	private int getIncIdx(Direction direction){
+		int idx = 1;
+		switch(direction){
+			case Up:
+				idx = (-1 * this.fieldWidth);
+				break;
+			case Down:
+				idx = this.fieldWidth;
+				break;
+			case Left:
+				idx = -1;
+				break;
+			case Right:
+				break;
+		}
+		return idx;
 	}
 }

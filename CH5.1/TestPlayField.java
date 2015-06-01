@@ -1,18 +1,19 @@
 /*					test drive	result 
 PlayField
-getShipNum			n/a
-getFieldLength		n/a
-getFieldWidth		n/a
-getShipOnLocNum		n/a
+getShipNum			n/a			n/a
+getFieldLength		n/a			n/a
+getFieldWidth		n/a			n/a
+getShipOnLocNum		n/a			n/a
 placeShips
-removeShip			n/a
-decrementShipNum	n/a
+removeShip			n/a			n/a
+decrementShipNum	n/a			n/a
 getRandomLocNum		ok			ok
-isPlaceable			n/a
+isPlaceable			n/a			n/a
 directShip
 checkOnTheEdge		ok			ok
 checkShipOnTheWay
-buildShip	
+buildShip			ok			ok
+getIncIdx			ok			ok
  */
 
 import java.lang.reflect.Method;
