@@ -135,6 +135,26 @@ public class PlayField{
 		return availableDirections;
 	}
 	
+	/**
+	 * Checks for each given direction whether any ship exists within the area
+	 * the ship might be built in
+	 * Returns possible directions for a ship to be built
+	 * Returns an empty ArrayList if no direction is available
+	 */
+	private ArrayList<Direction> checkShipOnTheWay(int locNum, ShipSize shipSize, ArrayList<Direction> availableDirections){
+		for(Direction direction : availableDirections){
+			int idx = getIncIdx(direction);
+			for(int  = 1; i < shipSize.getHpOfSize(); i++){
+				int locNumToCheck = locNum + i * idx;
+				if(!isPlaceable(locNumToCheck)){
+					availableDirections.remove(direction);
+					break;
+				}
+			}
+			return availableDirections;
+		}
+	}
+
 	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
 		int idx = getIncIdx(direction);
 		for(int i = 0; i < shipSize.getHpOfSize(); i++){

@@ -171,7 +171,23 @@ import java.util.Map;
 	}
 
 	private static void testCheckShipOnTheWay(){
+		System.out.println("### Start testCheckShipOnTheWay ###");
 
+		StubPlayField spf = new StubPlayField();
+		spf.setFieldLengthAndWidth(8, 8);
+		PlayField playField = spf;
+
+		try{
+			Method testMethod = testClass.getDeclaredMethod("checkShipOnTheWay", int.class,Ship.ShipSize.class, ArrayList.class);
+			testMethod.setAccessible(true);
+			Field shipLocation = testClass.getDeclaredField("shipLocation");
+			shipLocation.setAccessible(true);
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		System.out.println("### End testCheckShipOnTheWay ###");
 	}
 
 	private static void testBuildShip(){
