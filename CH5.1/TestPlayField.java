@@ -32,9 +32,10 @@ import java.util.Map;
 	public static void main(String[] args){
 		System.out.println("### Start TestPlayField ###");
 		
-//		testGetRandomLocNum();
+		//testGetRandomLocNum();
 		// testCheckOnTheEdge();
-		testBuildShip();
+		//testBuildShip();
+		testCheckShipOnTheWay();
 
 		System.out.println("### End TestPlayField ###");
 	}
@@ -162,9 +163,9 @@ import java.util.Map;
 		}
 		else{
 			testInput[0] = fieldWidth * (sizeValue - 1) + (fieldWidth / 2); // upper edge
-			testInput[1] = fieldWidth * (int)(fieldLength / 2) + sizeValue; // left edge
-			testInput[2] = fieldWidth * (int)(fieldLength / 2) - (sizeValue - 1); // right edge
-			testInput[3] = fieldWidth * (fieldLength - sizeValue) + (int)(fieldWidth / 2); // bottom edge
+			testInput[1] = fieldWidth * (fieldLength / 2) + sizeValue; // left edge
+			testInput[2] = fieldWidth * (fieldLength / 2) - (sizeValue - 1); // right edge
+			testInput[3] = fieldWidth * (fieldLength - sizeValue) + (fieldWidth / 2); // bottom edge
 		}
 
 		return testInput;
@@ -182,7 +183,88 @@ import java.util.Map;
 			testMethod.setAccessible(true);
 			Field shipLocation = testClass.getDeclaredField("shipLocation");
 			shipLocation.setAccessible(true);
+			Constructor<Ship> shipConst = Ship.class.getDeclaredConstructor(Ship.ShipSize.class, ArrayList.class);
+			shipConst.setAccessible(true);
 
+			ArrayList<String> nameList = new ArrayList<String>();
+			nameList.add("test.com");
+			Ship ship = shipConst.newInstance(Ship.ShipSize.Mid, nameList);
+			int locNum = 28;
+			HashMap<Integer, Ship> shipLocMap = new HashMap<Integer, Ship>();
+			ArrayList<PlayField.Direction> allDirections = initDirectionList();
+			ArrayList<PlayField.Direction> result;
+			ArrayList<PlayField.Direction> expected;
+			int caseNum = 0;
+			boolean succeeded = true;
+			// case 1: all available
+			shipLocMap.put(4, ship);
+			shipLocMap.put(52, ship);
+			shipLocMap.put(25, ship);
+			shipLocMap.put(31, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			expected = allDirections;
+			if(!Arrays.equals(result.toArray(), expected.toArray())){
+				System.out.format("case %s failed", ++caseNum);
+				succeeded = false;
+			}
+			// case 2: up unavailable
+			shipLocMap = new HashMap<Integer, Ship>();
+			shipLocMap.put(12, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			expected = allDirections;
+			expected.remove(PlayField.Direction.Up);
+			if(!Arrays.equals(result.toArray(), expected.toArray())){
+				System.out.format("case %s failed", ++caseNum);
+				succeeded = false;
+			}
+			// case 3: down unavailable
+			shipLocMap = new HashMap<Integer, Ship>();
+			shipLocMap.put(44, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			expected = allDirections;
+			expected.remove(PlayField.Direction.Down);
+			if(!Arrays.equals(result.toArray(), expected.toArray())){
+				System.out.format("case %s failed", ++caseNum);
+				succeeded = false;
+			}
+			// case 4: left unavailable
+			shipLocMap = new HashMap<Integer, Ship>();
+			shipLocMap.put(26, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			expected = allDirections;
+			expected.remove(PlayField.Direction.Left);
+			if(!Arrays.equals(result.toArray(), expected.toArray())){
+				System.out.format("case %s failed", ++caseNum);
+				succeeded = false;
+			}
+			// case 5: right unavailable
+			shipLocMap = new HashMap<Integer, Ship>();
+			shipLocMap.put(30, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			expected = allDirections;
+			expected.remove(PlayField.Direction.Right);
+			if(!Arrays.equals(result.toArray(), expected.toArray())){
+				System.out.format("case %s failed", ++caseNum);
+				succeeded = false;
+			}
+			// case 6: all unavailable
+			shipLocMap = new HashMap<Integer, Ship>();
+			shipLocMap.put(12, ship);
+			shipLocMap.put(44, ship);
+			shipLocMap.put(26, ship);
+			shipLocMap.put(30, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			expected = new ArrayList<PlayField.Direction>();
+			if(!Arrays.equals(result.toArray(), expected.toArray())){
+				System.out.format("case %s failed", ++caseNum);
+				succeeded = false;
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -202,13 +284,13 @@ import java.util.Map;
 				testMethod.setAccessible(true);
 				Field shipLocation = testClass.getDeclaredField("shipLocation");
 				shipLocation.setAccessible(true);
-				Constructor shipConst = Ship.class.getDeclaredConstructor(Ship.ShipSize.class, ArrayList.class);
+				Constructor<Ship> shipConst = Ship.class.getDeclaredConstructor(Ship.ShipSize.class, ArrayList.class);
 				shipConst.setAccessible(true);
 				ArrayList<String> shipNameList = new ArrayList<String>();
 				shipNameList.add("Google.com");
 				Ship ship = null;
 				for(Ship.ShipSize shipSize : Ship.ShipSize.values()){ // for each ship size
-					ship = (Ship)shipConst.newInstance(shipSize, shipNameList);
+					ship = shipConst.newInstance(shipSize, shipNameList);
 					shipNameList.add("Google.com");
 					System.out.println("Current ship size: " + shipSize);
  					for(PlayField.Direction direction : PlayField.Direction.values()){ // test each direction
@@ -223,5 +305,13 @@ import java.util.Map;
 			}
 			
 			System.out.println("### End testBuildShip ###");
+	}
+
+	private static ArrayList<PlayField.Direction> initDirectionList(){
+		ArrayList<PlayField.Direction> directionList = new ArrayList<PlayField.Direction>();
+		for(PlayField.Direction direction : PlayField.Direction.values()){
+			directionList.add(direction);
+		}
+		return directionList;
 	}
  }
