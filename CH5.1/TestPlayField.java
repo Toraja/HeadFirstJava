@@ -11,7 +11,7 @@ getRandomLocNum		ok			ok
 isPlaceable			n/a			n/a
 directShip
 checkOnTheEdge		ok			ok
-checkShipOnTheWay
+checkShipOnTheWay	ok			ok
 buildShip			ok			ok
 getIncIdx			ok			ok
  */
@@ -202,7 +202,8 @@ import java.util.Map;
 			shipLocMap.put(25, ship);
 			shipLocMap.put(31, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			result = initDirectionList();
+			testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, result);
 			expected = initDirectionList();
 			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
@@ -214,7 +215,8 @@ import java.util.Map;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(12, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			result = initDirectionList();
+			testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, result);
 			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Up);
 			System.out.println(Arrays.toString(result.toArray()));
@@ -227,7 +229,8 @@ import java.util.Map;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(44, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			result = initDirectionList();
+			testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, result);
 			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Down);
 			System.out.println(Arrays.toString(result.toArray()));
@@ -240,7 +243,8 @@ import java.util.Map;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(26, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			result = initDirectionList();
+			testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, result);
 			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Left);
 			System.out.println(Arrays.toString(result.toArray()));
@@ -253,7 +257,8 @@ import java.util.Map;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(30, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			result = initDirectionList();
+			testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, result);
 			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Right);
 			System.out.println(Arrays.toString(result.toArray()));
@@ -269,7 +274,8 @@ import java.util.Map;
 			shipLocMap.put(26, ship);
 			shipLocMap.put(30, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			result = initDirectionList();
+			testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, result);
 			expected = new ArrayList<PlayField.Direction>();
 			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){

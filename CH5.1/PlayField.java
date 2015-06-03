@@ -11,8 +11,8 @@ getRandomLocNum		yes
 isPlaceable			yes
 directShip
 checkOnTheEdge		yes
-checkShipOnTheWay
-buildShip	
+checkShipOnTheWay	yes
+buildShip			yes	
 getIncIdx			yes
  */
 import java.util.HashMap;
@@ -138,10 +138,11 @@ public class PlayField{
 	/**
 	 * Checks for each given direction whether any ship exists within the area
 	 * the ship might be built in
-	 * Returns possible directions for a ship to be built
-	 * Returns an empty ArrayList if no direction is available
+	 * Modify the given direction list (availableDirections) and limit the directions
+	 * only to ones that are free to build
+	 * availableDirections will be empty if no direction is available
 	 */
-	private ArrayList<Direction> checkShipOnTheWay(int locNum, Ship.ShipSize shipSize, ArrayList<Direction> availableDirections){
+	private void checkShipOnTheWay(int locNum, Ship.ShipSize shipSize, ArrayList<Direction> availableDirections){
 		ArrayList<Direction> iterationList = new ArrayList<Direction>();
 		iterationList.addAll(availableDirections);
 		for(Direction direction : iterationList){
@@ -154,7 +155,6 @@ public class PlayField{
 				}
 			}
 		}
-		return availableDirections;
 	}
 
 	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
