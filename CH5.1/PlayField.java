@@ -142,7 +142,9 @@ public class PlayField{
 	 * Returns an empty ArrayList if no direction is available
 	 */
 	private ArrayList<Direction> checkShipOnTheWay(int locNum, Ship.ShipSize shipSize, ArrayList<Direction> availableDirections){
-		for(Direction direction : availableDirections){
+		ArrayList<Direction> iterationList = new ArrayList<Direction>();
+		iterationList.addAll(availableDirections);
+		for(Direction direction : iterationList){
 			int idx = getIncIdx(direction);
 			for(int i  = 1; i < shipSize.getHpOfSize(); i++){
 				int locNumToCheck = locNum + i * idx;

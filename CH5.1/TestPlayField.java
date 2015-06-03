@@ -191,78 +191,89 @@ import java.util.Map;
 			Ship ship = shipConst.newInstance(Ship.ShipSize.Mid, nameList);
 			int locNum = 28;
 			HashMap<Integer, Ship> shipLocMap = new HashMap<Integer, Ship>();
-			ArrayList<PlayField.Direction> allDirections = initDirectionList();
 			ArrayList<PlayField.Direction> result;
 			ArrayList<PlayField.Direction> expected;
 			int caseNum = 0;
 			boolean succeeded = true;
 			// case 1: all available
+			caseNum++;
 			shipLocMap.put(4, ship);
 			shipLocMap.put(52, ship);
 			shipLocMap.put(25, ship);
 			shipLocMap.put(31, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
-			expected = allDirections;
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			expected = initDirectionList();
+			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
-				System.out.format("case %s failed", ++caseNum);
+				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
 			}
 			// case 2: up unavailable
+			caseNum++;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(12, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
-			expected = allDirections;
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Up);
+			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
-				System.out.format("case %s failed", ++caseNum);
+				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
 			}
 			// case 3: down unavailable
+			caseNum++;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(44, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
-			expected = allDirections;
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Down);
+			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
-				System.out.format("case %s failed", ++caseNum);
+				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
 			}
 			// case 4: left unavailable
+			caseNum++;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(26, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
-			expected = allDirections;
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Left);
+			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
-				System.out.format("case %s failed", ++caseNum);
+				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
 			}
 			// case 5: right unavailable
+			caseNum++;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(30, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
-			expected = allDirections;
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
+			expected = initDirectionList();
 			expected.remove(PlayField.Direction.Right);
+			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
-				System.out.format("case %s failed", ++caseNum);
+				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
 			}
 			// case 6: all unavailable
+			caseNum++;
 			shipLocMap = new HashMap<Integer, Ship>();
 			shipLocMap.put(12, ship);
 			shipLocMap.put(44, ship);
 			shipLocMap.put(26, ship);
 			shipLocMap.put(30, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, allDirections);
+			result = (ArrayList<PlayField.Direction>)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid, initDirectionList());
 			expected = new ArrayList<PlayField.Direction>();
+			System.out.println(Arrays.toString(result.toArray()));
 			if(!Arrays.equals(result.toArray(), expected.toArray())){
-				System.out.format("case %s failed", ++caseNum);
+				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
 			}
 		}catch(Exception e){
