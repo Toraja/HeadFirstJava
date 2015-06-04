@@ -110,8 +110,20 @@ public class PlayField{
 	}
 	
 	private Direction directShip(int locNum, Ship.ShipSize shipSize){
-		// TODO implement
-		return null;
+		Direction shipDirection;
+		ArrayList<Direction> availableDirections = checkOnTheEdge(locNum, shipSize);
+		checkShipOnTheWay(locNum, shipSize, availableDirections);
+
+		if(availableDirections.size() > 1){
+			shipDirection = availableDirections.get(SinkADotCom.getRandomIntUpTo(availableDirections.size() - 1));
+		}
+		else if(availableDirections.size() = 1){
+			shipDirection = availableDirections.get(0);
+		}
+		else{
+			// TODO return null or empty list when no direction is available?
+		}
+		return ;
 	}
 	
 	private ArrayList<Direction> checkOnTheEdge(int locNum, Ship.ShipSize shipSize){

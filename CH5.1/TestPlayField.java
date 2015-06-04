@@ -4,12 +4,12 @@ getShipNum			n/a			n/a
 getFieldLength		n/a			n/a
 getFieldWidth		n/a			n/a
 getShipOnLocNum		n/a			n/a
-placeShips
+placeShips			
 removeShip			n/a			n/a
 decrementShipNum	n/a			n/a
 getRandomLocNum		ok			ok
 isPlaceable			n/a			n/a
-directShip
+directShip			ok
 checkOnTheEdge		ok			ok
 checkShipOnTheWay	ok			ok
 buildShip			ok			ok
@@ -35,7 +35,8 @@ import java.util.Map;
 		//testGetRandomLocNum();
 		// testCheckOnTheEdge();
 		//testBuildShip();
-		testCheckShipOnTheWay();
+		//testCheckShipOnTheWay();
+		testDirectShip();
 
 		System.out.println("### End TestPlayField ###");
 	}
@@ -86,7 +87,91 @@ import java.util.Map;
 	}
 
 	private static void testDirectShip(){
+		System.out.println("### Start testDirectShip ###");
 
+		StubPlayField spf = new StubPlayField();
+		spf.setFieldLengthAndWidth(8, 8);
+		PlayField playField = spf;
+		
+		try{
+			Method testMethod = testClass.getDeclaredMethod("directShip", int.class, Ship.ShipSize.class);
+			testMethod.setAccessible(true);
+			Field shipLocation = testClass.getDeclaredField("shipLocation");
+			shipLocation.setAccessible(true);
+			Constructor<Ship> shipConst = Ship.class.getDeclaredConstructor(Ship.ShipSize.class, ArrayList.class);
+			shipConst.setAccessible(true);
+			
+			ArrayList<String> nameList = new ArrayList<String>();
+			nameList.add("test.com");
+			Ship ship = shipConst.newInstance(Ship.ShipSize.Mid, nameList);
+			int locNum;
+			HashMap<Integer, Ship> shipLocMap = new HashMap<Integer, Ship>();
+			PlayField.Direction result;
+			ArrayList<PlayField.Direction> expected;
+			int caseNum = 0;
+			boolean succeeded = true;
+
+			// case 1: small ship, upper edge, ship exists below
+			caseNum++;
+			locNum = 3;
+			shipLocMap.put(19, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Small);
+			expected = new ArrayList<PlayField.Direction>();
+			expected.add(PlayField.Direction.Left);
+			expected.add(PlayField.Direction.Right);
+			if(!expected.contains(result)){
+				System.out.format("case %s failed\n", caseNum);
+				succeeded = false;
+			}
+
+			// case 2: mid ship, bottom left corner, ship exists above
+			caseNum++;
+			locNum = 57;
+			shipLocMap.put(49, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Mid);
+			expected = new ArrayList<PlayField.Direction>();
+			expected.add(PlayField.Direction.Right);
+			if(!expected.contains(result)){
+				System.out.format("case %s failed\n", caseNum);
+				succeeded = false;
+			}
+			
+			// case 3: large ship, bottom right corner, ship exists on the left
+			caseNum++;
+			locNum = 54;
+			shipLocMap.put(52, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Large);
+			expected = new ArrayList<PlayField.Direction>();
+			expected.add(PlayField.Direction.Up);
+			if(!expected.contains(result)){
+				System.out.format("case %s failed\n", caseNum);
+				succeeded = false;
+			}
+
+			// case 4: large ship, upper right corner, ship exists below and on the left
+			caseNum++;
+			locNum = 16;
+			shipLocMap.put(14, ship);
+			shipLocMap.put(40, ship);
+			shipLocation.set(playField, shipLocMap);
+			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Large);
+			// TODO error: <identifier> expecte
+			if(result != null){
+				System.out.format("case %s failed\n", caseNum);
+				succeeded = false;
+			}
+
+			if(succeeded){
+				System.out.println("testDirectShip succeeded!");
+			}
+
+			System.out.println("### End testDirectShip ###");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	private static void testCheckOnTheEdge(){
