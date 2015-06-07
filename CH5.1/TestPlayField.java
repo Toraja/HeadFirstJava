@@ -4,7 +4,7 @@ getShipNum			n/a			n/a
 getFieldLength		n/a			n/a
 getFieldWidth		n/a			n/a
 getShipOnLocNum		n/a			n/a
-placeShips			
+placeShips			ok			ok
 removeShip			n/a			n/a
 decrementShipNum	n/a			n/a
 getRandomLocNum		ok			ok
@@ -36,7 +36,8 @@ import java.util.Map;
 		// testCheckOnTheEdge();
 		//testBuildShip();
 		//testCheckShipOnTheWay();
-		testDirectShip();
+		//testDirectShip();
+		testPlaceShips();
 
 		System.out.println("### End TestPlayField ###");
 	}
@@ -60,11 +61,17 @@ import java.util.Map;
 			Field shipLocation = testClass.getDeclaredField("shipLocation");
 			shipLocation.setAccessible(true);
 			Method calcTotalShipNum = SinkADotCom.class.getDeclaredMethod("calcTotalShipNum", int.class, int.class);
-			ArrayList<Ship> shipList = Ship.initShips((int)calcTotalShipNum.invoke(fieldLength, fieldWidth));
+			calcTotalShipNum.setAccessible(true);
+			ArrayList<Ship> shipList = Ship.initShips((int)calcTotalShipNum.invoke(SinkADotCom.class, fieldLength, fieldWidth));
 
 			testMethod.invoke(playField, shipList);
 
-			System.out.println(((Map)(shipLocation.get(playField))).entrySet());
+			Map<Integer, Ship> resultMap = (Map)(shipLocation.get(playField));
+			for(Integer locNum : resultMap.keySet()){
+				Ship ship = resultMap.get(locNum);
+				System.out.println(locNum + " : " + ship.getName() + " : " + ship.getSize());
+			}
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -403,7 +410,7 @@ import java.util.Map;
 			PlayField playField = spf;
 			
 			try{
-				Method testMethod = testClass.getDeclaredMethod("buildShip", Ship.class, int.class, PlayField.Direction.class, Ship.ShipSize.class);
+				Method testMethod = testClass.getDeclaredMethod("buildShip", Ship.class, int.class, PlayField.Direction.class);
 				testMethod.setAccessible(true);
 				Field shipLocation = testClass.getDeclaredField("shipLocation");
 				shipLocation.setAccessible(true);
@@ -418,7 +425,7 @@ import java.util.Map;
 					System.out.println("Current ship size: " + shipSize);
  					for(PlayField.Direction direction : PlayField.Direction.values()){ // test each direction
 						System.out.println("Current direction: " + direction);
-						testMethod.invoke(playField, ship, 28, direction, shipSize);
+						testMethod.invoke(playField, ship, 28, direction);
 						System.out.println(((Map)(shipLocation.get(playField))).entrySet());
 						shipLocation.set(playField, new HashMap<Integer, Ship>());
 					}

@@ -4,12 +4,12 @@ getShipNum			yes
 getFieldLength		yes
 getFieldWidth		yes
 getShipOnLocNum		yes
-placeShips
+placeShips			yes
 removeShip			yes
 decrementShipNum	yes
 getRandomLocNum		yes
 isPlaceable			yes
-directShip
+directShip			yes
 checkOnTheEdge		yes
 checkShipOnTheWay	yes
 buildShip			yes	
@@ -56,7 +56,19 @@ public class PlayField{
 		for(Ship ship : shipList){
 			boolean shipCreated = false;
 			while(!shipCreated){
-				//
+				int locNum = this.getRandomLocNum();
+				if(!this.isPlaceable(locNum)){
+					continue;
+				}
+
+				Direction direction = this.directShip(locNum, ship.getSize());
+				
+				if(direction == null){
+					continue;
+				}
+				
+				this.buildShip(ship, locNum, direction);
+				shipCreated = true;
 			}
 		}
 	}
@@ -77,6 +89,10 @@ public class PlayField{
 		return !shipLocation.containsKey(locNum);	
 	}
 	
+	/**
+	 * Returns a Direction for a ship to be build along
+	 * Returns null if no direction is available
+	 */
 	private Direction directShip(int locNum, Ship.ShipSize shipSize){
 		Direction shipDirection = null;
 		ArrayList<Direction> availableDirections = checkOnTheEdge(locNum, shipSize);
@@ -135,9 +151,9 @@ public class PlayField{
 		}
 	}
 
-	private void buildShip(Ship ship, int locNum, Direction direction, Ship.ShipSize shipSize){
+	private void buildShip(Ship ship, int locNum, Direction direction){
 		int idx = getIncIdx(direction);
-		for(int i = 0; i < shipSize.getHpOfSize(); i++){
+		for(int i = 0; i < ship.getSize().getHpOfSize(); i++){
 			shipLocation.put(locNum + i * idx, ship);
 		}
 	}
