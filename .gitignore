@@ -44,4 +44,4 @@ Temporary Items
 
 
 # vim's temporary file
-.swp
+*.swp
