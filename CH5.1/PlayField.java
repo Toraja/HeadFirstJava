@@ -51,47 +51,15 @@ public class PlayField{
 		return shipLocation.get(locNum);
 	}
 	
-/* 	
-	private void placeShips(int totalShipNum){
-//		ArrayList<Integer> locNumList = new ArrayList<Integer>();
-		final int shipTypeNum = Ship.ShipSize.values().length; // 3
-		int shipNumCreated = 0;
-		
-		// init each size of ship
-		for(int i = 0; i < shipTypeNum; i++){
-			Ship.ShipSize shipSizeToCreate = Ship.ShipSize.values()[i];
-			int shipNumToCreate;
-			
-			if(i != (shipTypeNum - 1)){ // not the last size
-				shipNumToCreate = SinkADotCom.getRandomIntUpTo(totalShipNum - shipNumCreated);
-				shipNumCreated = shipNumCreated + shipNumToCreate;
+ 	
+	private void placeShips(ArrayList<Ship> shipList){
+		for(Ship ship : shipList){
+			boolean shipCreated = false;
+			while(!shipCreated){
+				//
 			}
-			else { // the last size
-				shipNumToCreate = totalShipNum - shipNumCreated;
-			}
-			
-			//	init ship for the size
-			for(int j = 0; j < shipNumToCreate; j++){
-				Ship ship = new Ship(shipSizeToCreate);
-				int locationNum;
-				
-				while(true){ // get random location num until the location is empty
-					locationNum = getRandomLocNum();
-					
-					if (isPlaceable(locationNum)){
-						break;
-					}
-				}
-				
-				Direction direction = directShip(locationNum, shipSizeToCreate);
-				
-				buildShip(ship, locationNum, direction, shipSizeToCreate);
-			}
-			
 		}
-		
 	}
- */	
  
 	public void removeShip(int locNum){
 		shipLocation.remove(locNum);
@@ -110,20 +78,18 @@ public class PlayField{
 	}
 	
 	private Direction directShip(int locNum, Ship.ShipSize shipSize){
-		Direction shipDirection;
+		Direction shipDirection = null;
 		ArrayList<Direction> availableDirections = checkOnTheEdge(locNum, shipSize);
 		checkShipOnTheWay(locNum, shipSize, availableDirections);
 
 		if(availableDirections.size() > 1){
 			shipDirection = availableDirections.get(SinkADotCom.getRandomIntUpTo(availableDirections.size() - 1));
 		}
-		else if(availableDirections.size() = 1){
+		else if(availableDirections.size() == 1){
 			shipDirection = availableDirections.get(0);
 		}
-		else{
-			// TODO return null or empty list when no direction is available?
-		}
-		return ;
+		
+		return shipDirection;
 	}
 	
 	private ArrayList<Direction> checkOnTheEdge(int locNum, Ship.ShipSize shipSize){

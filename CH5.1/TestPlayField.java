@@ -1,5 +1,5 @@
 /*					test drive	result 
-PlayField
+PlayField			n/a			n/a
 getShipNum			n/a			n/a
 getFieldLength		n/a			n/a
 getFieldWidth		n/a			n/a
@@ -9,7 +9,7 @@ removeShip			n/a			n/a
 decrementShipNum	n/a			n/a
 getRandomLocNum		ok			ok
 isPlaceable			n/a			n/a
-directShip			ok
+directShip			ok			ok
 checkOnTheEdge		ok			ok
 checkShipOnTheWay	ok			ok
 buildShip			ok			ok
@@ -46,7 +46,29 @@ import java.util.Map;
 	}
 
 	private static void testPlaceShips(){
+		System.out.println("### Start testPlaceShip ###");
+		
+		try{
+			int fieldLength = 9;
+			int fieldWidth = 9;
+			StubPlayField spf = new StubPlayField();
+			spf.setFieldLengthAndWidth(fieldLength, fieldWidth);
+			PlayField playField = spf;
+			
+			Method testMethod = testClass.getDeclaredMethod("placeShips", ArrayList.class);
+			testMethod.setAccessible(true);
+			Field shipLocation = testClass.getDeclaredField("shipLocation");
+			shipLocation.setAccessible(true);
+			Method calcTotalShipNum = SinkADotCom.class.getDeclaredMethod("calcTotalShipNum", int.class, int.class);
+			ArrayList<Ship> shipList = Ship.initShips((int)calcTotalShipNum.invoke(fieldLength, fieldWidth));
 
+			testMethod.invoke(playField, shipList);
+
+			System.out.println(((Map)(shipLocation.get(playField))).entrySet());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		System.out.println("### End testPlaceShip ###");
 	}
 	
 	private static void testGetRandomLocNum(){
@@ -116,7 +138,7 @@ import java.util.Map;
 			locNum = 3;
 			shipLocMap.put(19, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Small);
+			result = (PlayField.Direction)testMethod.invoke(playField, locNum, Ship.ShipSize.Small);
 			expected = new ArrayList<PlayField.Direction>();
 			expected.add(PlayField.Direction.Left);
 			expected.add(PlayField.Direction.Right);
@@ -130,7 +152,7 @@ import java.util.Map;
 			locNum = 57;
 			shipLocMap.put(49, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Mid);
+			result = (PlayField.Direction)testMethod.invoke(playField, locNum, Ship.ShipSize.Mid);
 			expected = new ArrayList<PlayField.Direction>();
 			expected.add(PlayField.Direction.Right);
 			if(!expected.contains(result)){
@@ -143,7 +165,7 @@ import java.util.Map;
 			locNum = 54;
 			shipLocMap.put(52, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Large);
+			result = (PlayField.Direction)testMethod.invoke(playField, locNum, Ship.ShipSize.Large);
 			expected = new ArrayList<PlayField.Direction>();
 			expected.add(PlayField.Direction.Up);
 			if(!expected.contains(result)){
@@ -157,8 +179,7 @@ import java.util.Map;
 			shipLocMap.put(14, ship);
 			shipLocMap.put(40, ship);
 			shipLocation.set(playField, shipLocMap);
-			result = (PlayField.Direction)testMethod.invoke(locNum, Ship.ShipSize.Large);
-			// TODO error: <identifier> expecte
+			result = (PlayField.Direction)testMethod.invoke(playField, locNum, Ship.ShipSize.Large);
 			if(result != null){
 				System.out.format("case %s failed\n", caseNum);
 				succeeded = false;
