@@ -1,5 +1,5 @@
 /*					test drive	result 
-PlayField			n/a			n/a
+PlayField			ok			ok
 getShipNum			n/a			n/a
 getFieldLength		n/a			n/a
 getFieldWidth		n/a			n/a
@@ -37,13 +37,43 @@ import java.util.Map;
 		//testBuildShip();
 		//testCheckShipOnTheWay();
 		//testDirectShip();
-		testPlaceShips();
+		//testPlaceShips();
+		testPlayField();
 
 		System.out.println("### End TestPlayField ###");
 	}
  
 	private static void testPlayField(){
+		System.out.println("### Start testPlaceShip ###");
+		
+		try{
+			int fieldLength = 9;
+			int fieldWidth = 9;
+			//StubPlayField spf = new StubPlayField();
+			//spf.setFieldLengthAndWidth(fieldLength, fieldWidth);
+			//PlayField playField = spf;
+			
+			Constructor<PlayField> testMethod = PlayField.class.getDeclaredConstructor(int.class, int.class, int.class, ArrayList.class);
+			testMethod.setAccessible(true);
+			Field shipLocation = testClass.getDeclaredField("shipLocation");
+			shipLocation.setAccessible(true);
+			Method calcTotalShipNum = SinkADotCom.class.getDeclaredMethod("calcTotalShipNum", int.class, int.class);
+			calcTotalShipNum.setAccessible(true);
+			int totalShipNum = (int)calcTotalShipNum.invoke(SinkADotCom.class, fieldLength, fieldWidth);
+			ArrayList<Ship> shipList = Ship.initShips(totalShipNum);
 
+			PlayField playField = testMethod.newInstance(fieldLength, fieldWidth, totalShipNum, shipList);
+
+			Map<Integer, Ship> resultMap = (Map)(shipLocation.get(playField));
+			for(Integer locNum : resultMap.keySet()){
+				Ship ship = resultMap.get(locNum);
+				System.out.println(locNum + " : " + ship.getName() + " : " + ship.getSize());
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		System.out.println("### End testPlaceShip ###");
 	}
 
 	private static void testPlaceShips(){

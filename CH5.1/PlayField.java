@@ -34,6 +34,16 @@ public class PlayField{
 			this.value = value;
 		}
 	}
+
+	public PlayField(int fieldLength, int fieldWidth, int shipNum, ArrayList<Ship> shipList){
+		this.fieldLength = fieldLength;
+		this.fieldWidth = fieldWidth;
+		this.shipNum = shipNum;
+
+		this.placeShips(shipList);
+
+		System.out.println("There are " + shipNum + "ships on the field.");
+	}
 	
 	public int getShipNum(){
 		return this.shipNum;
