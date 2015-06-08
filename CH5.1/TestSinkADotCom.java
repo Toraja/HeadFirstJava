@@ -28,10 +28,10 @@ public class TestSinkADotCom {
 		
 		// testGetRandomIntUpTo();
 		// testValidateFieldSize();
-//		testCalcTotalShipNum();
-//		testInitValidationArrays();
-//		testValidateInput();	
-		testConvCoordinateToLocNum();
+		//testCalcTotalShipNum();
+		//testInitValidationArrays();
+		testValidateInput();	
+		//testConvCoordinateToLocNum();
 			
 		System.out.println("*** The end of the test ***");
 	}

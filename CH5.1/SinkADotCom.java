@@ -6,13 +6,14 @@ convCoordinateToLocNum	yes
 validateFieldSize		yes
 init					yes
 calcTotalShipNum		yes
-play					
+play					yes
 initValidationArrays	yes
 validateInput			yes
 */
 
 import java.lang.IllegalArgumentException;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -25,10 +26,12 @@ public class SinkADotCom{
 	private static String coordiChar;
 	private static String coordiNum;
 	private static PlayField playField;
+	private static Player player;
 	private static Map<String, Integer> charToNumMap = new HashMap<String, Integer>();
 	
 	public static void main(String[] args) {
-		
+		init(9, 9);
+		play();
 	}
 	
 	public static int getRandomIntUpTo(int maxNum){
@@ -65,10 +68,10 @@ public class SinkADotCom{
 		validateFieldSize(fieldLength, fieldWidth);
 		
 		int totalShipNum = calcTotalShipNum(fieldLength, fieldWidth);
-		ArrayList<Ship> shipList = initShips(totalShipNum);
+		ArrayList<Ship> shipList = Ship.initShips(totalShipNum);
 		
-		PlayField playField = new PlayField(fieldLength, fieldWidth, totalShipNum, shipList);
-		
+		SinkADotCom.playField = new PlayField(fieldLength, fieldWidth, totalShipNum, shipList);
+		SinkADotCom.player = new Player();
 		initValidationArrays(fieldLength, fieldWidth);
 	}
 
@@ -80,28 +83,38 @@ public class SinkADotCom{
 	private static void play(){
 		String hitMsg = "Hit %s!\n";
 		String killMsg = "Killed %s!!\n";
-		String shipNumMsg = "%s more %s to sink!\n"
+		String shipNumMsg = "%s more %s to sink!\n";
 		String shipSinglar = "ship";
 		String shipPlural = "ships";
 		do{ // while ships still exist on the field
+			String coordinate;
 			do{ // get user input and repeat if it's not valid
-				String coordinate = shoot();
-			}while(SinkADotCom.validateInput(coordinate))
+				coordinate = player.shoot();
+			}while(!SinkADotCom.validateInput(coordinate));
 
-			int locNum = SinkADotCom.convCoordinateToLocNum(coordinate);
+			int locNum = SinkADotCom.convCoordinateToLocNum();
 			
-			Ship targetShip = this.playField.getShipOnLocNum(locNum);
+			Ship targetShip = SinkADotCom.playField.getShipOnLocNum(locNum);
 
-			if(ship != null){
-				this.playField.removeShip(locNum);
-				ship.decrementHp();
-				System.out.formatt(hitMsg, ship.getName());
-				if(ship.getHp() == 0){
-					System.out.format(killMsg, ship.getName());
-					System.out.format
+			if(targetShip == null){
+				System.out.println("miss");
+			}else{
+				SinkADotCom.playField.removeShip(locNum);
+				targetShip.decrementHp();
+				System.out.format(hitMsg, targetShip.getName());
+				if(targetShip.getHp() == 0){
+					System.out.format(killMsg, targetShip.getName());
+					playField.decrementShipNum();
+					int shipNum = playField.getShipNum();
+					if(shipNum != 0){
+						String shipForMsg = (shipNum == 1) ? shipSinglar : shipPlural;
+						System.out.format(shipNumMsg,shipNum, shipForMsg); 
+					}
 				}
 			}
-		}while(this.playField.getShipNum() != 0)
+		}while(SinkADotCom.playField.getShipNum() != 0);
+		System.out.println();
+		System.out.println("You have sunk all the ship.");
 	}
 	
 	private static void initValidationArrays(int fieldLength, int fieldWidth){

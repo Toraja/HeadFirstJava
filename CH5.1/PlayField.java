@@ -57,7 +57,7 @@ public class PlayField{
 		return this.fieldWidth;
 	}
 	
-	private Ship getShipOnLocNum(int locNum){
+	public Ship getShipOnLocNum(int locNum){
 		return shipLocation.get(locNum);
 	}
 	
