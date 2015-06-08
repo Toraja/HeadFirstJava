@@ -4,9 +4,9 @@ main
 getRandomIntUpTo		yes
 convCoordinateToLocNum	yes
 validateFieldSize		yes
-init
+init					yes
 calcTotalShipNum		yes
-play
+play					
 initValidationArrays	yes
 validateInput			yes
 */
@@ -61,9 +61,47 @@ public class SinkADotCom{
 		}
 	}
 	
+	private static void init(int fieldLength, int fieldWidth) throws IllegalArgumentException{
+		validateFieldSize(fieldLength, fieldWidth);
+		
+		int totalShipNum = calcTotalShipNum(fieldLength, fieldWidth);
+		ArrayList<Ship> shipList = initShips(totalShipNum);
+		
+		PlayField playField = new PlayField(fieldLength, fieldWidth, totalShipNum, shipList);
+		
+		initValidationArrays(fieldLength, fieldWidth);
+	}
+
 	private static int calcTotalShipNum(int fieldLength, int fieldWidth){
 		final float fieldShipRatio = 15f;
 		return Math.round(fieldLength * fieldWidth / fieldShipRatio);
+	}
+
+	private static void play(){
+		String hitMsg = "Hit %s!\n";
+		String killMsg = "Killed %s!!\n";
+		String shipNumMsg = "%s more %s to sink!\n"
+		String shipSinglar = "ship";
+		String shipPlural = "ships";
+		do{ // while ships still exist on the field
+			do{ // get user input and repeat if it's not valid
+				String coordinate = shoot();
+			}while(SinkADotCom.validateInput(coordinate))
+
+			int locNum = SinkADotCom.convCoordinateToLocNum(coordinate);
+			
+			Ship targetShip = this.playField.getShipOnLocNum(locNum);
+
+			if(ship != null){
+				this.playField.removeShip(locNum);
+				ship.decrementHp();
+				System.out.formatt(hitMsg, ship.getName());
+				if(ship.getHp() == 0){
+					System.out.format(killMsg, ship.getName());
+					System.out.format
+				}
+			}
+		}while(this.playField.getShipNum() != 0)
 	}
 	
 	private static void initValidationArrays(int fieldLength, int fieldWidth){
@@ -73,9 +111,6 @@ public class SinkADotCom{
 		SinkADotCom.charList = Arrays.asList(Arrays.copyOf(allCharArray, fieldLength));
 		SinkADotCom.numList = Arrays.asList(Arrays.copyOf(allNumArray, fieldWidth));
 		
-//		for(int i = 0; i < SinkADotCom.charList.size(); i++){
-//			SinkADotCom.charToNumMap.put(SinkADotCom.charList.get(i), i + 1);
-//		}
 	}
 	
 	private static boolean validateInput(String input){

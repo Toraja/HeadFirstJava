@@ -4,9 +4,9 @@ main
 getRandomIntUpTo		ok			ok
 convCoordinateToLocNum	ok			ok
 validateFieldSize		ok			ok
-init	
+init					*tested in main
 calcTotalShipNum		ok			ok
-play	
+play					*tested in main
 initValidationArrays	ok			ok
 validateInput			ok			ok
 */
