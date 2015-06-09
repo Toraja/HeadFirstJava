@@ -115,6 +115,7 @@ public class SinkADotCom{
 		}while(SinkADotCom.playField.getShipNum() != 0);
 		System.out.println();
 		System.out.println("You have sunk all the ship.");
+		System.out.println("Number of trial: " + SinkADotCom.numTrial);
 	}
 	
 	private static void initValidationArrays(int fieldLength, int fieldWidth){
@@ -127,17 +128,18 @@ public class SinkADotCom{
 	}
 	
 	private static boolean validateInput(String input){
-		if (input == null || input.length() < 2) { // 
-			System.out.println("Invalid input: " + input);
-			return false;
+		boolean isValid = false;
+		if (input != null && input.length() >= 2) { // 
+			SinkADotCom.coordiChar = input.substring(0, 1).toUpperCase();
+			SinkADotCom.coordiNum = input.substring(1);
+			if(SinkADotCom.charList.contains(coordiChar) && SinkADotCom.numList.contains(coordiNum)){
+				SinkADotCom.numTrial++;
+				isValid = true;
+			}
 		}
-		
-		SinkADotCom.coordiChar = input.substring(0, 1).toUpperCase();
-		SinkADotCom.coordiNum = input.substring(1);
-		boolean isValid = SinkADotCom.charList.contains(coordiChar) && SinkADotCom.numList.contains(coordiNum);
-		
-		if (isValid) { // 
-			SinkADotCom.numTrial++;
+
+		if(!isValid){
+			System.out.println("Invalid input: " + input);
 		}
 		
 		return isValid;
