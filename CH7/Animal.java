@@ -55,6 +55,7 @@ abstract class Canine extends Animal{
 	//Food food = Food.meat;
 	//int hunger = 4;
 
+	// abstract class can have a constructor
 	Canine(){
 		this.hunger = 4;
 		this.food = Food.meat;
