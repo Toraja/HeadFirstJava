@@ -25,7 +25,8 @@ public class Animalist<E> extends ArrayList<E>{
 		}
 
 		for(Animal an : al){
-			System.out.print(an.getClass().getSimpleName() + ": ");an.makeNoise();
+			System.out.print(an.getClass().getSimpleName() + ": ");
+			an.makeNoise();
 		}
 	}
 }

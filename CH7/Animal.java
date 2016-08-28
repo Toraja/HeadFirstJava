@@ -1,43 +1,82 @@
 public abstract class Animal{
 	// TODO store picture
-	Food food;		// TODO create Food Enum
-	int hunger;		// hunger lever (how much a animal eats; min 1 - 10 max)
-	int picHeight;		// height of the picture
-	int picWidth;		// width of the picture
-	int locationX;		// X coordinate
-	int locationY;		// Y coordinate
+	static Food food;			// Food Enum
+	static String noise;		// noise an animal makes
+	static String roamingType;	// how an animal roams
+	static int hunger;					// hunger lever (how much a animal eats; min 1 - 10 max)
+	int picHeight;				// height of the picture
+	int picWidth;				// width of the picture
+	int locationX;				// X coordinate
+	int locationY;				// Y coordinate
 
-	abstract void makeNoise();
+	void makeNoise(){
+		System.out.println(this.getClass().getSimpleName() + " says " + this.noise);
+	}
 
 	void eat(){
 		for (int i = 0; i < this.hunger; i++){
-			System.out.println("Eating " + this.food);
+			System.out.println(this.getClass().getSimpleName() + " is eating " + this.food);
 		}
 	}
 
 	void sleep(){
-		System.out.println("Zzz...");
+		System.out.println(this.getClass().getSimpleName() + " is Zzz...");
 	}
 
 	void roam(){
-		//TODO implement basic roaming
+		// TODO move an image
+		System.out.println(this.getClass().getSimpleName() + " is roaming " + this.roamingType);
 	}
 
 	public static void main(String[] args){
-		//Animal dai = new Dog();
-		//dai.eat();
-		//dai.makeNoise();
-		
-		//Pet dai = new PetDog();
-		//dai.beFriendly();
-		//dai.greet();
-		//dai.sleep();
-		//dai.makeNoise();
+		Dog d = new Dog();
+		d.makeNoise();
+		d.roam();
+		d.eat();
+		System.out.println();
 
-		Shiba pochi = new Shiba();
+		Wolf w = new Wolf();
+		w.makeNoise();
+		w.roam();
+		w.eat();
+		System.out.println();
+
+		Cat c = new Cat();
+		c.makeNoise();
+		c.roam();
+		c.eat();
+		System.out.println();
+
+		Tiger t = new Tiger();
+		t.makeNoise();
+		t.roam();
+		t.eat();
+		System.out.println();
+
+		Lion l = new Lion();
+		l.makeNoise();
+		l.roam();
+		l.eat();
+		System.out.println();
+
+		Hippopotamus h = new Hippopotamus();
+		h.makeNoise();
+		h.roam();
+		h.eat();
+		System.out.println();
+
+		Wolf w2 = new Wolf();
+		w2.makeNoise();
+		w2.roam();
+		w2.eat();
+		System.out.println();
+
+		Shiba pochi = new Shiba("pochi");
 		pochi.beFriendly();
 		pochi.greet();
 		pochi.sleep();
+		pochi.makeNoise();
+		pochi.roam();
 	}
 }
 
@@ -52,99 +91,98 @@ enum Food{
 }
 
 abstract class Canine extends Animal{
-	//Food food = Food.meat;
-	//int hunger = 4;
+	// instance/class variable can be initialized in this way
+	// but it seems overkill to declare new? variables
+	// Food food = Food.meat;
+	// int hunger = 4;
 
-	// abstract class can have a constructor
-	Canine(){
-		this.hunger = 4;
-		this.food = Food.meat;
+	// this seems the best way for initializing class variables
+	static {
+		Canine.food = Food.meat;
+		Canine.roamingType = "in a herd";
+		Canine.hunger = 4;
 	}
-	void roam(){
-		//TODO move in packs
-	}
+
+	// abstract class can have a constructor and use "this" keyword
+	// Canine(){
+		// this.hunger = 4;
+		// this.roamingType = "in a herd";
+		// this.food = Food.meat;
+	// }
 }
 
 abstract class Feline extends Animal{
-	Food food = Food.meat;
+
+	static {
+		Feline.food = Food.meat;
+	}
 
 	void catwalk(){
-		System.out.println("cat walking");
-	}
-	
-	void roam(){
-		//TODO move alone
+		System.out.println(this.getClass().getSimpleName() + " is cat-walking");
 	}
 }
 
 abstract class Hippopotamine extends Animal{
-	Food food = Food.grass;
+
+	static {
+		Hippopotamine.food = Food.grass;
+	}
 }
 
 class Dog extends Canine{
-	Dog(){
-		//this.hunter = super.hunter;
-		//this.hunter = 4;
-	}
 
-	@Override
-	void makeNoise(){
-		System.out.println("bowwow");
+	static {
+		Dog.noise = "bowwow";
 	}
 }
 
 class Wolf extends Canine{
-	Wolf() {
-		this.hunger = 6;
+
+	static {
+		Wolf.hunger = 6;
+		Wolf.noise = "owooooo";
 	}
 
 	@Override
 	void makeNoise(){
-		System.out.println("owooooo");
+		System.out.println(this.getClass().getSimpleName() + " says " + Wolf.noise);
 	}
+
 }
 
 class Cat extends Feline{
-	Cat() {
-		this.hunger = 2;
-	}
 
-	@Override
-	void makeNoise(){
-		System.out.println("meow");
+	static {
+		Cat.hunger = 2;
+		Cat.noise = "meow";
+		Cat.roamingType = "alone";
 	}
 }
 
 class Tiger extends Feline{
-	Tiger() {
-		this.hunger = 7;
-	}
-	
-	@Override
-	void makeNoise(){
-		System.out.println("roar");
+
+	static {
+		Tiger.hunger = 7;
+		Tiger.noise = "roar";
+		Tiger.roamingType = "alone";
 	}
 }
 
 class Lion extends Feline{
-	Lion() {
-		this.hunger = 8;
-	}
-	
-	@Override
-	void makeNoise(){
-		System.out.println("gurrrr");
+
+	static {
+		Lion.hunger = 8;
+		Lion.noise = "gurrrr";
+		Lion.roamingType = "in a herd";
 	}
 }
 
 class Hippopotamus extends Hippopotamine{
-	Hippopotamus() {
-		this.hunger = 9;
-	}
-	
-	@Override
-	void makeNoise(){
-		System.out.println("....");
+
+	static {
+		Hippopotamus.hunger = 9;
+		Hippopotamus.noise = ".....";
+		Hippopotamus.roamingType = "in a herd";
 	}
 }
 
@@ -155,20 +193,28 @@ interface Pet {
 }
 
 class PetDog extends Dog implements Pet {
+	String name;
+
+	public PetDog(String name){
+		this.name = name;
+	}
+
 	@Override
 	public void beFriendly(){
-		System.out.println("lick lick lick");
+		System.out.println(this.name + " is being friednly: lick lick lick");
 	}
 	@Override
 	public void greet(){
-		System.out.println("Pat pat pat");
+		System.out.println(this.name + " is greeting: Pat pat pat");
 	}
 	@Override
 	public void sleep(){
-		System.out.println("Zzzzzzzzzzzzzzzzzzzzzzzz...");
+		System.out.println(this.name + " is sleeping: Zzzzzzzzzzzzzzzzzzzzzzzz...");
 	}
 }
 
 class Shiba extends PetDog{
-
+	public Shiba(String name){
+		super(name);
+	}
 }
