@@ -1,9 +1,9 @@
 public abstract class Animal{
 	// TODO store picture
-	static Food food;			// Food Enum
-	static String noise;		// noise an animal makes
-	static String roamingType;	// how an animal roams
-	static int hunger;					// hunger lever (how much a animal eats; min 1 - 10 max)
+	Food food;					// Food Enum
+	String noise;				// noise an animal makes
+	String roamingType;			// how an animal roams
+	int hunger;					// hunger lever (how much a animal eats; min 1 - 10 max)
 	int picHeight;				// height of the picture
 	int picWidth;				// width of the picture
 	int locationX;				// X coordinate
@@ -14,9 +14,11 @@ public abstract class Animal{
 	}
 
 	void eat(){
-		for (int i = 0; i < this.hunger; i++){
-			System.out.println(this.getClass().getSimpleName() + " is eating " + this.food);
-		}
+		// for (int i = 0; i < this.hunger; i++){
+			// System.out.println(this.getClass().getSimpleName() + " is eating " + this.food);
+		// }
+		String foodAdjustedForHungerLevel = new String(new char[this.hunger]).replace("\0", (this.food.toString() + " ").subSequence(0, this.food.toString().length() + 1));
+		System.out.println(this.getClass().getSimpleName() + " is eating " + foodAdjustedForHungerLevel + "...");
 	}
 
 	void sleep(){
@@ -33,6 +35,9 @@ public abstract class Animal{
 		d.makeNoise();
 		d.roam();
 		d.eat();
+		d.fetch(new Frisbee());
+		d.fetch(new Boomerang());
+		d.fetch(new Exception());
 		System.out.println();
 
 		Wolf w = new Wolf();
@@ -97,24 +102,25 @@ abstract class Canine extends Animal{
 	// int hunger = 4;
 
 	// this seems the best way for initializing class variables
-	static {
-		Canine.food = Food.meat;
-		Canine.roamingType = "in a herd";
-		Canine.hunger = 4;
-	}
+	// but cannot be used here as those variables are non-static now
+	// static {
+		// Canine.food = Food.meat;
+		// Canine.roamingType = "in a herd";
+		// Canine.hunger = 4;
+	// }
 
 	// abstract class can have a constructor and use "this" keyword
-	// Canine(){
-		// this.hunger = 4;
-		// this.roamingType = "in a herd";
-		// this.food = Food.meat;
-	// }
+	Canine(){
+		this.hunger = 4;
+		this.roamingType = "in a herd";
+		this.food = Food.meat;
+	}
 }
 
 abstract class Feline extends Animal{
 
-	static {
-		Feline.food = Food.meat;
+	Feline() {
+		this.food = Food.meat;
 	}
 
 	void catwalk(){
@@ -124,65 +130,72 @@ abstract class Feline extends Animal{
 
 abstract class Hippopotamine extends Animal{
 
-	static {
-		Hippopotamine.food = Food.grass;
+	Hippopotamine() {
+		this.food = Food.grass;
 	}
 }
 
 class Dog extends Canine{
 
-	static {
-		Dog.noise = "bowwow";
+	Dog() {
+		this.noise = "bowwow";
+	}
+
+	public Catchable fetch(Throwable t){
+		String thisName = this.getClass().getSimpleName();
+		String throwableName = t.getClass().getSimpleName();
+		if(t instanceof Catchable){
+			System.out.println(thisName + " caught " + throwableName);
+			return (Catchable)t;
+		}
+		else{
+			System.out.println(thisName + " failed to catch " + throwableName);
+			return null;
+		}
 	}
 }
 
 class Wolf extends Canine{
 
-	static {
-		Wolf.hunger = 6;
-		Wolf.noise = "owooooo";
+	Wolf() {
+		this.hunger = 6;
+		this.noise = "owooooo";
 	}
-
-	@Override
-	void makeNoise(){
-		System.out.println(this.getClass().getSimpleName() + " says " + Wolf.noise);
-	}
-
 }
 
 class Cat extends Feline{
 
-	static {
-		Cat.hunger = 2;
-		Cat.noise = "meow";
-		Cat.roamingType = "alone";
+	Cat() {
+		this.hunger = 2;
+		this.noise = "meow";
+		this.roamingType = "alone";
 	}
 }
 
 class Tiger extends Feline{
 
-	static {
-		Tiger.hunger = 7;
-		Tiger.noise = "roar";
-		Tiger.roamingType = "alone";
+	Tiger() {
+		this.hunger = 7;
+		this.noise = "roar";
+		this.roamingType = "alone";
 	}
 }
 
 class Lion extends Feline{
 
-	static {
-		Lion.hunger = 8;
-		Lion.noise = "gurrrr";
-		Lion.roamingType = "in a herd";
+	Lion() {
+		this.hunger = 8;
+		this.noise = "gurrrr";
+		this.roamingType = "in a herd";
 	}
 }
 
 class Hippopotamus extends Hippopotamine{
 
-	static {
-		Hippopotamus.hunger = 9;
-		Hippopotamus.noise = ".....";
-		Hippopotamus.roamingType = "in a herd";
+	Hippopotamus() {
+		this.hunger = 9;
+		this.noise = ".....";
+		this.roamingType = "in a herd";
 	}
 }
 
@@ -218,3 +231,4 @@ class Shiba extends PetDog{
 		super(name);
 	}
 }
+
