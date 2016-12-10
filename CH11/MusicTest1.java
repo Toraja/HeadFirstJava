@@ -7,10 +7,10 @@ public class MusicTest1{
 			Sequencer sequencer = MidiSystem.getSequencer();
 		}
 		catch(MidiUnavailableException e){
-			System.out.println("Failed to init MIDI player");
+			System.out.println("Bummer");
 		}
 
-		System.out.println("Bummer");
+		System.out.println("Sequencer is ready");
 	}
 
 	public static void main(String[] args){
