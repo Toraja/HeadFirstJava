@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class MyDrawPanel extends JPanel{
+public class MyDrawPanelImage extends JPanel{
 	JButton button;
 
 	public static void main(String[] args){
 		JFrame frame = new JFrame();
-		MyDrawPanel gui = new MyDrawPanel();
+		MyDrawPanelImage gui = new MyDrawPanelImage();
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 300);
@@ -19,7 +19,7 @@ public class MyDrawPanel extends JPanel{
 	// The argument is the canvas provided to you by system
 	// to draw whatever you want
 	public void paintComponent(Graphics g){
-		g.setColor(Color.orange);
-		g.fillRect(20, 50, 50, 100);
+		Image image = new ImageIcon("cat.jpeg").getImage();
+		g.drawImage(image, 3, 4, this);
 	}
 }
