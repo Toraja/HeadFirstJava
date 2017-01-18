@@ -26,12 +26,12 @@ public class SimpleAnimation{
 		pane.add(BorderLayout.CENTER, drawPanel);
 
 		for(int i = 0; i < 130; i++){
-			frame.repaint();
+			drawPanel.repaint();
 			try{
 				Thread.sleep(50);
 			}
 			catch(InterruptedException e){
-				System.out.println("Hey, don't disturb my sleep dream, would you?");
+				System.out.println("Hey, don't disturb my sweet dream, would you?");
 			}
 		}
 	}

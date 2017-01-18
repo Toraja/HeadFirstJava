@@ -13,7 +13,6 @@ public class VariousMiddleC{
 		cccc.play();
 	}
 
-	// TODO change timing for each
 	public void play(){
 		try{
 			Sequencer player = MidiSystem.getSequencer();
