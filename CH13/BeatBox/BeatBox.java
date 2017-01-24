@@ -26,43 +26,47 @@ public class BeatBox{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		// getScreenSizes returns real screen size including taskbar/panel
 		Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());
-		// you have to know where the taskbar/panel is located...
-		// or get the coordinate of the top and bottom of frame,
-		// get the distance of frame and screen edge and
-		// substract the sum from the screen height.
+		// This works only if taskbar/panel is located at the top.
+		// To support both top and bottom, get the coordinate of the top and bottom of frame,
+		// get the distance of frame and screen edge and substract the sum from the screen height.
 		frame.setSize(screenSize.width, screenSize.height - insets.top);
 		frame.setVisible(true);
 
 		Container pane = frame.getContentPane();
 
 		// west: all the label of instruments
-		JPanel westPanel = new JPanel();
+		// JPanel westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
 		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
+		// westPanel.setBackground(Color.blue);
 		pane.add(BorderLayout.WEST, westPanel);
+
+		// center: checkboxes for beats
+		// centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+		// westPanel.setBackground(Color.blue);
+		pane.add(BorderLayout.CENTER, centerPanel);
+
 		try{
-			// FIXME this is working but not displayed properly. any way to refresh swing window?
 			Files.lines(Paths.get("/home/mojito/coding/java/HeadFirstJava/CH13/BeatBox/Instruments.conf"))
-				.forEachOrdered(s -> westPanel.add(new JLabel(s)));
+				.forEachOrdered(s -> this.initLabelAndCheckbox(centerPanel, westPanel, s));
 		}
 		catch(IOException ex){
-			// ex.printStackTrace();
 			System.out.println("err: \"" + ex.getMessage() + "\" was not found.");
 		}
 
-		// center:
-
-		// buttonChangeColor.addActionListener(new MyListener4DColor());
-		// buttonChangeText.addActionListener(new MyListener4DText());
-
-		// MyDrawPanel4D drawPanel = new MyDrawPanel4D();
-
-		// label = new JLabel("sup?");
-
-		// Container pane = frame.getContentPane();
-		// pane.add(BorderLayout.CENTER, drawPanel);
-		// pane.add(BorderLayout.WEST, label);
-
 		frame.validate();		// without this, components will not be displayed properly
+	}
+
+	// this method has to receive center and west panel or it throws NullPointerException...
+	private void initLabelAndCheckbox(JPanel centerPanel, JPanel westPanel, String instName){
+		JPanel westPanelForEachInst = new JPanel();
+		westPanelForEachInst.add(new JLabel(instName));
+		JPanel centerPanelForEachInst = new JPanel();
+		for(int i = 0; i < 16; i++){
+			centerPanelForEachInst.add(new JCheckBox());
+		}
+		westPanel.add(westPanelForEachInst);
+		centerPanel.add(centerPanelForEachInst);
 	}
 
 	// class MyListener4DColor implements ActionListener {
