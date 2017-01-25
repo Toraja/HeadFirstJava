@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class BeatBox{
 	JFrame frame;
-	JPanel westPanel;		// panel for labels
+	// JPanel westPanel;		// panel for labels
 	JPanel centerPanel;		// panel for checkboxes
 	JPanel eastPanel;		// panel for buttons
 	// JLabel label;
@@ -22,51 +22,68 @@ public class BeatBox{
 	// initialise components
 	public void init(){
 		// frame
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.frame = new JFrame();
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();		// getScreenSizes returns real screen size including taskbar/panel
-		Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(frame.getGraphicsConfiguration());
+		Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(this.frame.getGraphicsConfiguration());
 		// This works only if taskbar/panel is located at the top.
 		// To support both top and bottom, get the coordinate of the top and bottom of frame,
 		// get the distance of frame and screen edge and substract the sum from the screen height.
-		frame.setSize(screenSize.width, screenSize.height - insets.top);
-		frame.setVisible(true);
+		this.frame.setSize(screenSize.width, screenSize.height - insets.top);
+		this.frame.setVisible(true);
 
-		Container pane = frame.getContentPane();
+		Container pane = this.frame.getContentPane();
 
-		// west: all the label of instruments
-		// JPanel westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
-		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
+		// // West: all the label of instruments
+		// // JPanel westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
+		// westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
+		// // westPanel.setBackground(Color.blue);
+		// pane.add(BorderLayout.WEST, westPanel);
+
+		// TODO widen so that all label can fit in
+		// Center: labels for instruments and checkboxes representing beats
+		// this.centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
+		this.centerPanel = new JPanel();
+		this.centerPanel.setLayout(new GridLayout(16, 17));
 		// westPanel.setBackground(Color.blue);
-		pane.add(BorderLayout.WEST, westPanel);
-
-		// center: checkboxes for beats
-		// centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
-		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-		// westPanel.setBackground(Color.blue);
-		pane.add(BorderLayout.CENTER, centerPanel);
-
+		pane.add(BorderLayout.CENTER, this.centerPanel);
 		try{
 			Files.lines(Paths.get("/home/mojito/coding/java/HeadFirstJava/CH13/BeatBox/Instruments.conf"))
-				.forEachOrdered(s -> this.initLabelAndCheckbox(centerPanel, westPanel, s));
+				// .forEachOrdered(s -> this.initLabelAndCheckbox(this.centerPanel, westPanel, s));
+				// .forEachOrdered(s -> this.initLabelAndCheckbox(this.centerPanel, s));
+				.forEachOrdered(s -> this.initLabelAndCheckbox(s));
 		}
 		catch(IOException ex){
 			System.out.println("err: \"" + ex.getMessage() + "\" was not found.");
 		}
 
-		frame.validate();		// without this, components will not be displayed properly
+		// FIXME looks ugly
+		// East: buttons
+		this.eastPanel = new JPanel();
+		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
+		pane.add(BorderLayout.EAST, this.eastPanel);
+		this.eastPanel.add(new JButton("Start"));
+		this.eastPanel.add(new JButton("Stop"));
+		this.eastPanel.add(new JButton("Tempo Up"));
+		this.eastPanel.add(new JButton("Tempo Down"));
+
+
+		this.frame.validate();		// without this, components will not be displayed properly
 	}
 
 	// this method has to receive center and west panel or it throws NullPointerException...
-	private void initLabelAndCheckbox(JPanel centerPanel, JPanel westPanel, String instName){
-		JPanel westPanelForEachInst = new JPanel();
-		westPanelForEachInst.add(new JLabel(instName));
-		JPanel centerPanelForEachInst = new JPanel();
+	// private void initLabelAndCheckbox(JPanel centerPanel, JPanel westPanel, String instName){
+	// private void initLabelAndCheckbox(JPanel centerPanel, String instName){
+	private void initLabelAndCheckbox(String instName){
+		// JPanel westPanelForEachInst = new JPanel();
+		// westPanelForEachInst.add(new JLabel(instName));
+		// JPanel centerPanelForEachInst = new JPanel();
+		this.centerPanel.add(new JLabel(instName));
 		for(int i = 0; i < 16; i++){
-			centerPanelForEachInst.add(new JCheckBox());
+			this.centerPanel.add(new JCheckBox());
 		}
-		westPanel.add(westPanelForEachInst);
-		centerPanel.add(centerPanelForEachInst);
+		// westPanel.add(westPanelForEachInst);
+		// this.centerPanel.add(centerPanelForEachInst);
 	}
 
 	// class MyListener4DColor implements ActionListener {
