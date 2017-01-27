@@ -76,27 +76,4 @@ public class Panel1{
 			panel.remove(button2);
 		}
 	}
-
-	// public void goNorth(){
-		// JFrame frame = new JFrame();
-		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// button = new JButton("There is no spoon...");
-		// button.addActionListener(new NorthListener());
-		// frame.getContentPane().add(BorderLayout.NORTH, button);
-		// frame.setSize(200, 200);
-		// frame.setVisible(true);
-	// }
-
-	// class NorthListener implements ActionListener{
-		// public void actionPerformed(ActionEvent event){
-			// if(button.getFont().getSize() == 28){
-				// Font smallfont = new Font("Dialog", Font.BOLD, 12);
-				// button.setFont(smallfont);
-			// }
-			// else{
-				// Font smallfont = new Font("serif", Font.BOLD, 28);
-				// button.setFont(smallfont);
-			// }
-		// }
-	// }
 }
