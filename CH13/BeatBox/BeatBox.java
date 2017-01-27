@@ -4,19 +4,35 @@ import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class BeatBox{
-	JFrame frame;
-	// JPanel westPanel;		// panel for labels
-	JPanel centerPanel;		// panel for checkboxes
-	JPanel eastPanel;		// panel for buttons
-	// JLabel label;
-	// JCheckBox check;
+	private static ArrayList<String> instrumentsList;
+	private static final int NUM_OF_BEATS = 16;
+	private JFrame frame;
+	private JPanel westPanel;		// panel for labels
+	private JPanel centerPanel;		// panel for checkboxes
+	private JPanel eastPanel;		// panel for buttons
+	private JButton startButton;
+	private JButton stopButton;
+	private JButton tempoUpButton;
+	private JButton tempoDownButton;
+
+	static {
+		BeatBox.instrumentsList = new ArrayList<String>();
+		try{
+			Files.lines(Paths.get("/home/mojito/coding/java/HeadFirstJava/CH13/BeatBox/Instruments.conf"))
+				.forEachOrdered(s -> BeatBox.instrumentsList.add(s));
+		}
+		catch(IOException ex){
+			System.err.println("err: \"" + ex.getMessage() + "\" was not found.");
+			throw new Error(ex);
+		}
+	}
 
 	public static void main(String[] args){
 		BeatBox gui = new BeatBox();
 		gui.init();
-		// gui.start();
 	}
 
 	// initialise components
@@ -34,71 +50,64 @@ public class BeatBox{
 
 		Container pane = this.frame.getContentPane();
 
-		// // West: all the label of instruments
-		// // JPanel westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
-		// westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
-		// // westPanel.setBackground(Color.blue);
-		// pane.add(BorderLayout.WEST, westPanel);
+		// West: all the label of instruments
+		this.westPanel = new JPanel();
+		this.westPanel.setLayout(new GridLayout(BeatBox.instrumentsList.size(), 1));
+		pane.add(BorderLayout.WEST, this.westPanel);
 
-		// TODO widen so that all label can fit in
 		// Center: labels for instruments and checkboxes representing beats
-		// this.centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));		// does not work
 		this.centerPanel = new JPanel();
-		this.centerPanel.setLayout(new GridLayout(16, 17));
-		// westPanel.setBackground(Color.blue);
+		this.centerPanel.setLayout(new GridLayout(BeatBox.instrumentsList.size(), BeatBox.NUM_OF_BEATS));
 		pane.add(BorderLayout.CENTER, this.centerPanel);
-		try{
-			Files.lines(Paths.get("/home/mojito/coding/java/HeadFirstJava/CH13/BeatBox/Instruments.conf"))
-				// .forEachOrdered(s -> this.initLabelAndCheckbox(this.centerPanel, westPanel, s));
-				// .forEachOrdered(s -> this.initLabelAndCheckbox(this.centerPanel, s));
-				.forEachOrdered(s -> this.initLabelAndCheckbox(s));
-		}
-		catch(IOException ex){
-			System.out.println("err: \"" + ex.getMessage() + "\" was not found.");
+
+		for(String instrument : BeatBox.instrumentsList){
+			this.westPanel.add(new JLabel(instrument));
+			for(int i = 0; i < BeatBox.NUM_OF_BEATS; i++){
+				this.centerPanel.add(new JCheckBox());
+			}
 		}
 
-		// FIXME looks ugly
 		// East: buttons
 		this.eastPanel = new JPanel();
-		eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
+		eastPanel.setLayout(new GridLayout(8, 1, 5, 20));
 		pane.add(BorderLayout.EAST, this.eastPanel);
-		this.eastPanel.add(new JButton("Start"));
-		this.eastPanel.add(new JButton("Stop"));
-		this.eastPanel.add(new JButton("Tempo Up"));
-		this.eastPanel.add(new JButton("Tempo Down"));
+		this.startButton = new JButton("Start");
+		this.stopButton = new JButton("Stop");
+		this.tempoUpButton = new JButton("Tempo Up");
+		this.tempoDownButton = new JButton("Tempo Down");
+		this.startButton.addActionListener(new StartButtonListener());
+		this.stopButton.addActionListener(new StopButtonListener());
+		this.tempoUpButton.addActionListener(new TempoUpListener());
+		this.tempoDownButton.addActionListener(new TempoDownListener());
+		this.eastPanel.add(startButton);
+		this.eastPanel.add(stopButton);
+		this.eastPanel.add(tempoUpButton);
+		this.eastPanel.add(tempoDownButton);
 
 
 		this.frame.validate();		// without this, components will not be displayed properly
 	}
 
-	// this method has to receive center and west panel or it throws NullPointerException...
-	// private void initLabelAndCheckbox(JPanel centerPanel, JPanel westPanel, String instName){
-	// private void initLabelAndCheckbox(JPanel centerPanel, String instName){
-	private void initLabelAndCheckbox(String instName){
-		// JPanel westPanelForEachInst = new JPanel();
-		// westPanelForEachInst.add(new JLabel(instName));
-		// JPanel centerPanelForEachInst = new JPanel();
-		this.centerPanel.add(new JLabel(instName));
-		for(int i = 0; i < 16; i++){
-			this.centerPanel.add(new JCheckBox());
+	class StartButtonListener implements ActionListener{
+		public void actionPerformed(ActionEvent event){
+			System.out.println("StartButtonListener");
 		}
-		// westPanel.add(westPanelForEachInst);
-		// this.centerPanel.add(centerPanelForEachInst);
 	}
-
-	// class MyListener4DColor implements ActionListener {
-
-		// public void actionPerformed(ActionEvent event){
-			// frame.repaint();
-		// }
-	// }
-
-	// class MyListener4DText implements ActionListener {
-
-		// public void actionPerformed(ActionEvent event){
-			// label.setText("You've clicked my bro.");
-		// }
-	// }
+	class StopButtonListener implements ActionListener{
+		public void actionPerformed(ActionEvent event){
+			System.out.println("StopButtonListener");
+		}
+	}
+	class TempoUpListener implements ActionListener{
+		public void actionPerformed(ActionEvent event){
+			System.out.println("TempoUpListener");
+		}
+	}
+	class TempoDownListener implements ActionListener{
+		public void actionPerformed(ActionEvent event){
+			System.out.println("TempoDownListener");
+		}
+	}
 
 	// class MyDrawPanel4D extends JPanel{
 		// public void paintComponent(Graphics g){
