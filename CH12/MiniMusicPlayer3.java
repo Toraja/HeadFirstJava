@@ -42,37 +42,33 @@ public class MiniMusicPlayer3{
 
 			for(int i = 1; i < 61; i+=4){
 				int tone = (int)(Math.random() * 60) + 35;
-				track.add(createShortMessage(ShortMessage.NOTE_ON, SM_CHANNEL_PIANO, tone, SM_DEFAULT_INTENSITY, i));
 				track.add(createShortMessage(ShortMessage.CONTROL_CHANGE, SM_CHANNEL_PIANO, 127, 0, i));
-				track.add(createShortMessage(ShortMessage.NOTE_OFF, SM_CHANNEL_PIANO, tone, SM_DEFAULT_INTENSITY, i));
+				track.add(createShortMessage(ShortMessage.NOTE_ON, SM_CHANNEL_PIANO, tone, SM_DEFAULT_INTENSITY, i));
+				track.add(createShortMessage(ShortMessage.NOTE_OFF, SM_CHANNEL_PIANO, tone, SM_DEFAULT_INTENSITY, i + 3));
 			}
 
 			sequencer.setSequence(seq);
 			sequencer.setTempoInBPM(120);
 			sequencer.start();
 
-			// sequencer.stop();
-
-			// TimeUnit.SECONDS.sleep(3);
-			// sequencer.close();
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
 		}
 	}
 
-	public MidiEvent createShortMessage(int type, int channel, int tone, int intensity, int Tick){
+	public MidiEvent createShortMessage(int type, int channel, int tone, int intensity, int tick){
 		ShortMessage sm = null;
 
 		try{
-			sm = new ShortMessage();
-			sm.setMessage(type, channel, tone, intensity);
+			sm = new ShortMessage(type, channel, tone, intensity);
+			// sm.setMessage(type, channel, tone, intensity);
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
 		}
 
-		return new MidiEvent(sm, Tick);
+		return new MidiEvent(sm, tick);
 	}
 
 	class MyDrawPanel extends JPanel implements ControllerEventListener{

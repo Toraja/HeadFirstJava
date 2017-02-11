@@ -66,8 +66,6 @@ public class VariousMiddleC{
 
 			player.start();
 
-			// player.stop();
-
 			TimeUnit.SECONDS.sleep(3);
 			player.close();
 		}
