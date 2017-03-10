@@ -12,6 +12,7 @@ public class TextArea1 implements ActionListener{
 
 	public void go(){
 		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		JButton button = new JButton();
 		button.addActionListener(this);
