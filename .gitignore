@@ -45,6 +45,11 @@ Temporary Items
 
 # vim's temporary file
 *.swp
+*.swo
+Session.vim
 
 # compiled resources
 *.class
+
+# image file
+*.png
