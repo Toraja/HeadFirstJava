@@ -1,0 +1,122 @@
+/' TODO
+Delete GuiBase and make all Gui class extends JPanel
+Move all the code in initGui to constructor
+'/
+
+@startuml
+abstract class GuiBase{
+	/' by making gui variable staitc, each page will be cached '/
+	/' but consumes more memory '/
+	#JPanel gui
+	+{abstract} JPanel initGui();
+}
+
+/' Top page '/
+class GuiTop extends JPanel{
+	-JPanel north;
+	-JPanel center;
+	-JLabel title;
+	-JButton playButton;
+	-JButton createNewCardsetButton;
+	-JButton editCardsetButton;
+}
+
+/' Page for selecting cardsets to play or add/edit cards '/
+class GuiSelectCardSet extends JPanel{
+	-JPanel center;
+	-JPanel south;
+	-JButton addCardsButton;
+	-JButton editCardsetButton;
+	-JButton deleteCardsetsButton;
+	-ButtonGroup cardsetRadioButtons;
+}
+
+/' Page for selecting individual card to edit or delete '/
+class GuiSelectCard extends JPanel{
+	-JPanel editPanel;		/' panel for edit/delete button '/
+	-JPanel confirmPanel;	/' panel for save/cancel button '/
+	-JButton editButton;	/' panel will be switched when pressed '/
+	-JButton deleteButton;	/' always confirm '/
+	-JButton saveButton;	/''/
+	-JButton cancelButton;	/' always confirm '/
+}
+
+/' Page to write flashcard when adding or editing '/
+class GuiWriteCard extends JPanel{
+	-JTextArea questionArea;
+	-JTextArea answerArea;
+	-JButton addButton;		/' fail if either of two textareas are empty. save every time '/
+	-JButton quitButton;	/' warn if either of two textareas are not empty '/
+}
+
+/' Page for playing flashcard '/
+/' TODO update variables'/
+class GuiPlay extends JPanel{
+	-JPanel north;
+	-JPanel center;
+	-JPanel south;
+	-JButton showAnswerButton;
+	-JButton skipButton;
+	-JButton correctButton;
+	-JButton wrongButton;
+	-JButton quitButton;
+	-JTextArea questionArea;
+	-JTextArea answerArea;
+	-JLabel doneCount;
+	-JLabel totalCardNum;
+	-JLabel slash;
+	-JLabel correctLabel;
+	-JLabel correctCount;
+	-JLabel wrongLabel;
+	-JLabel wrongCount;
+}
+
+class FlashCard implements Seriarizable{
+	-String question;
+	-String answer;
+	+FlashCard(question, answer);
+	+String getQuestion();
+	+String getAnswer();
+}
+
+/' class FlashCardSet implements Seriarizable{ '/
+	/' String setName '/
+	/' ArrayList<FlashCard> cardset '/
+/' } '/
+
+class FlashCardPlayer{
+	/' update progress label '/
+	+void play(ArrayList<FlashCard> cardset);
+}
+
+class FlashCardBuilder{
+	/' lock cardset.ser in advance '/
+	/' TODO how? --> http://stackoverflow.com/questions/128038/how-can-i-lock-a-file-using-java-if-possible'/
+	+void createNewCards(String title, ArrayList<FlashCard> cardset);
+}
+
+class FlashCardManager{
+	-JFrame frame;
+	-JPanel background;
+	-{staic} Map<String, ArrayList<FlashCard>> cardsets;
+	+void main();
+	+void addCardsetUniquely(String title, ArrayList<FlashCard> cardsets);
+	/' vv should it be done by GuiManager or something? '/
+	-void switchGui(JPanel gui);
+}
+/' note left of FlashCardManager::switchGui '/
+note left of FlashCardManager
+	switches gui on clicking button that
+	moves to another page
+end note
+
+note top of FlashCardManager
+	cardset is saved to a file (cardset.ser),
+	and loaded whenever needed.
+end note
+
+FlashCardPlayer - FlashCard : plays >
+FlashCardBuilder - FlashCard : creates >
+FlashCardManager - FlashCardPlayer : calls >
+FlashCardManager - FlashCardBuilder : calls >
+@enduml
