@@ -1,14 +1,13 @@
 /' TODO
 Delete GuiBase and make all Gui class extends JPanel
-Move all the code in initGui to constructor
+--> revert the change
+XXX Move all the code in initGui to constructor
+Try removing all getter and setter
 '/
 
 @startuml
-abstract class GuiBase{
-	/' by making gui variable staitc, each page will be cached '/
-	/' but consumes more memory '/
-	#JPanel gui
-	+{abstract} JPanel initGui();
+interface GuiBase{
+	+ JPanel initGui();
 }
 
 /' Top page '/
